@@ -1463,7 +1463,7 @@ balls.push(bb);
 function calcSetSize(){var r1=sel[0]!==null?TEAMS[sel[0]].r:70,r2=sel[1]!==null?TEAMS[sel[1]].r:70,d=Math.abs(r1-r2);return d>40?4:d>20?3:2;}
 
 function loop(ts){
-requestAnimationFrame(loop);var dt=Math.min((ts-lastTs)/1000,.80);lastTs=ts;
+requestAnimationFrame(loop);var dt=Math.min((ts-lastTs)/1000,.05);lastTs=ts;
 ctx.clearRect(0,0,W(),H());drawArena();
 if(gState==='countdown'||gState==='paused'){balls.forEach(function(b){b.update(0);b.draw();});}
 if(gState==='playing'){
