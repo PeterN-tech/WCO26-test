@@ -437,9 +437,9 @@ function CTRL_W(){return Math.max(72,Math.min(W()*0.22,110));}
 function PITCH_L(){return CTRL_W();}
 function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
-function PITCH_T(){return Math.round(H()*0.11);}
+function PITCH_T(){return Math.round(H()*0.10);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return H();}
+function PITCH_B(){return Math.round(H()*0.99);}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
