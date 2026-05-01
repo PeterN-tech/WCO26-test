@@ -18,8 +18,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WC Oracle">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Rajdhani:wght@400;500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -237,12 +235,71 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   </div>
   <div class="mode-divider"></div>
   <div class="mode-logo">⚽</div>
-  <div class="half-bot" id="btn-mode-multi">
+  <div class="half-bot" id="btn-mode-multi" style="opacity:0.6;pointer-events:none;">
     <div class="pitch-tex"></div><div class="glow-bl"></div>
     <div class="half-icon">🌍</div>
     <div class="half-title">1 VS 1</div>
     <div class="half-desc">Online · real opponent</div>
-    <button class="half-btn">PLAY NOW</button>
+    <button class="half-btn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.2);">COMING SOON</button>
+  </div>
+</div>
+
+<div class="screen off" id="s-aimode">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;width:92%;max-width:420px;">
+    <div style="font-family:'Russo One',sans-serif;font-size:15px;letter-spacing:3px;color:#fff;text-align:center;">VS AI</div>
+    <div style="font-size:8px;letter-spacing:3px;color:rgba(255,204,0,0.4);text-transform:uppercase;margin-top:-10px;">choose your mode</div>
+    <div id="btn-vsai-normal" style="width:100%;background:rgba(91,200,255,0.06);border:1px solid rgba(91,200,255,0.25);border-radius:14px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:36px;">🤖</div>
+      <div>
+        <div style="font-family:'Russo One',sans-serif;font-size:14px;letter-spacing:2px;color:#5bc8ff;">PLAY SINGLE MATCH</div>
+        <div style="font-size:8px;color:rgba(91,200,255,0.4);letter-spacing:1px;margin-top:3px;">Pick teams · play · repeat</div>
+      </div>
+    </div>
+    <div id="btn-vsai-quest" style="width:100%;background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.25);border-radius:14px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:36px;">⚔</div>
+      <div>
+        <div style="font-family:'Russo One',sans-serif;font-size:14px;letter-spacing:2px;color:#ffd700;">PLAY WORLD CUP QUEST</div>
+        <div style="font-size:8px;color:rgba(255,204,0,0.4);letter-spacing:1px;margin-top:3px;">Climb 49 nations · beat Argentina</div>
+      </div>
+    </div>
+    <div id="btn-aimode-back" style="font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.18);cursor:pointer;text-transform:uppercase;margin-top:4px;">BACK</div>
+  </div>
+</div>
+
+<div class="screen off" id="s-quest-setup" style="overflow-y:auto;">
+  <div style="width:92%;max-width:420px;padding:16px 0 80px;display:flex;flex-direction:column;gap:12px;">
+    <div class="menu-title" style="font-size:16px;margin-bottom:0;">⚔ QUEST</div>
+    <div class="pbox" style="width:100%;">
+      <div class="plabel" style="color:rgba(91,200,255,0.6);">YOUR NAME</div>
+      <input class="nick" id="qn1" type="text" maxlength="12" placeholder="YOUR NAME">
+      <div class="plabel" style="color:rgba(91,200,255,0.6);margin-top:8px;">YOUR TEAM</div>
+      <select class="team-sel" id="qt1"><option value="">Select Country</option></select>
+    </div>
+    <div class="sect-label">ARENA</div>
+    <div class="drow" id="q-arena-row"></div>
+    <div class="sect-label">DIFFICULTY</div>
+    <div class="drow" id="q-diff-row"></div>
+  </div>
+  <button class="btn-main" id="btn-quest-play" style="position:fixed;bottom:24px;right:16px;z-index:30;">ENTER TOWER</button>
+  <button class="btn-sec" id="btn-quest-back" style="position:fixed;bottom:24px;left:16px;z-index:30;">BACK</button>
+</div>
+
+<div class="screen off" id="s-quest-tower" style="background:#0a0010;overflow:hidden;">
+  <div id="qt-inner" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 30%,#200030 0%,#0a0010 50%,#150500 100%);">
+    <div style="font-size:14px;letter-spacing:4px;color:rgba(220,220,220,0.7);margin:10px 0 4px;">CHOOSE YOUR DESTINY</div>
+    <div id="qt-sub" style="font-size:10px;letter-spacing:2px;color:rgba(255,204,0,0.5);margin-bottom:6px;"></div>
+    <div style="flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:0 8px;width:100%;overflow:hidden;">
+      <div id="qt-viewport" style="overflow:hidden;height:calc(100vh - 110px);position:relative;display:flex;flex-direction:row;gap:6px;">
+        <div id="qt-mover" style="display:flex;flex-direction:row;gap:6px;align-items:flex-start;transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1);">
+          <div id="qt-pcol" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
+          <div id="qt-tower" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center;width:80px;flex-shrink:0;">
+        <button onclick="startQuestMatch()" style="background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:8px;padding:14px 6px;font-size:12px;letter-spacing:1px;color:#000;cursor:pointer;width:100%;font-weight:bold;">PLAY</button>
+        <div onclick="exitQuest()" style="font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.35);cursor:pointer;text-align:center;margin-top:4px;">EXIT</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -437,9 +494,9 @@ function CTRL_W(){return Math.max(72,Math.min(W()*0.22,110));}
 function PITCH_L(){return CTRL_W();}
 function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
-function PITCH_T(){return Math.round(H()*0.10);}
+function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return Math.round(H()*0.99);}
+function PITCH_B(){return H();}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
@@ -509,8 +566,6 @@ function drawTribunes(){
   ctx.globalAlpha=1;
   ctx.globalAlpha=.78;arena.drawFlag(W()/2,pT/2,pitchW*.3,pT*.72);ctx.globalAlpha=1;
   ctx.fillStyle=arena.accentLine;ctx.globalAlpha=.7;ctx.fillRect(pL,pT-1,pitchW,3);ctx.globalAlpha=1;
-
-
 }
 
 var TEAMS=[
@@ -1409,7 +1464,7 @@ function showScreen(id){document.getElementById(id).classList.remove('off');}
 function hideScreen(id){document.getElementById(id).classList.add('off');}
 
 document.getElementById('btn-play').addEventListener('click',function(){
-  var n1=document.getElementById('n1').value.trim()||'PLAYER',n2=document.getElementById('n2').value.trim()||'CPU';
+  var n1=document.getElementById('n1').value.trim()||'PLAYER',n2=document.getElementById('n2').value.trim()||(sel[1]!==null?TEAMS[sel[1]].n.toUpperCase():'CPU');
   pNames=[n1.toUpperCase(),n2.toUpperCase()];
   var f1=sel[0]!==null?TEAMS[sel[0]].f:'🌍';var f2=sel[1]!==null?TEAMS[sel[1]].f:'🌍';
   document.getElementById('hf1').textContent=f1;document.getElementById('hf2').textContent=f2;
@@ -1423,10 +1478,42 @@ document.getElementById('btn-play').addEventListener('click',function(){
   hideScreen('s-menu');startCD();
 });
 document.getElementById('btn-rm').addEventListener('click',function(){hideScreen('s-end');startCD();});
-document.getElementById('btn-mode-ai').addEventListener('click',function(){hideScreen('s-mode');showScreen('s-menu');gState='menu';document.getElementById('btn-back-menu').style.display='block';document.getElementById('btn-play').style.display='block';});
+
+// AI mode sub-screen handlers
+document.getElementById('btn-vsai-normal').addEventListener('click',function(){
+  hideScreen('s-aimode');
+  showScreen('s-menu');
+  gState='menu';
+  document.getElementById('btn-back-menu').style.display='block';
+  document.getElementById('btn-play').style.display='block';
+});
+document.getElementById('btn-vsai-quest').addEventListener('click',function(){
+  hideScreen('s-aimode');
+  initQuestSetup();
+  questLoadSetup(); // restore last session
+  showScreen('s-quest-setup');
+});
+document.getElementById('btn-aimode-back').addEventListener('click',function(){
+  hideScreen('s-aimode');
+  showScreen('s-mode');
+});
+document.getElementById('btn-quest-back').addEventListener('click',function(){
+  hideScreen('s-quest-setup');
+  showScreen('s-aimode');
+});
+document.getElementById('btn-quest-play').addEventListener('click',function(){
+  if(qSel===null){alert('Select your team!');return;}
+  questMode=true;
+  questDiff=qDiff;
+  questProgress=questLoad(qDiff);
+  hideScreen('s-quest-setup');
+  renderQuestTower();
+  showScreen('s-quest-tower');
+});
+document.getElementById('btn-mode-ai').addEventListener('click',function(){hideScreen('s-mode');showScreen('s-aimode');});
 document.getElementById('btn-mode-multi').addEventListener('click',function(){hideScreen('s-mode');showScreen('s-multi');var code=Math.floor(1000+Math.random()*9000);document.getElementById('m-room-code').textContent=code;document.getElementById('m-room-code2').textContent=code;mGoState('default');});
-document.getElementById('btn-back-menu').addEventListener('click',function(){hideScreen('s-menu');showScreen('s-mode');gState='menu';document.getElementById('btn-back-menu').style.display='none';document.getElementById('btn-play').style.display='none';});
-document.getElementById('btn-menu').addEventListener('click',function(){hideScreen('s-end');hideSC();showScreen('s-mode');gState='menu';document.getElementById('btn-back-menu').style.display='none';document.getElementById('btn-play').style.display='none';});
+document.getElementById('btn-back-menu').addEventListener('click',function(){hideScreen('s-menu');showScreen('s-aimode');gState='menu';document.getElementById('btn-back-menu').style.display='none';document.getElementById('btn-play').style.display='none';});
+document.getElementById('btn-menu').addEventListener('click',function(){var hm2=document.getElementById('humillacion-mundial');if(hm2)hm2.style.display='none';hideScreen('s-end');hideSC();showScreen('s-mode');gState='menu';document.getElementById('btn-back-menu').style.display='none';document.getElementById('btn-play').style.display='none';});
 
 function mGoState(s){document.getElementById('mst-default').classList.toggle('on',s==='default');document.getElementById('mst-search').classList.toggle('on',s==='search');}
 function mSwitchTab(t){document.getElementById('m-tab-create').classList.toggle('on',t==='create');document.getElementById('m-tab-join').classList.toggle('on',t==='join');document.getElementById('m-sub-create').classList.toggle('on',t==='create');document.getElementById('m-sub-join').classList.toggle('on',t==='join');}
@@ -1902,14 +1989,181 @@ function checkOrientation(){var overlay=document.getElementById('rotate-overlay'
 checkOrientation();
 window.addEventListener('resize',checkOrientation);
 window.addEventListener('orientationchange',function(){setTimeout(checkOrientation,150);});
-</script>
 
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js');
+// == QUEST MODE ==
+var questMode=false,questProgress=0,questDiff=1;
+var qSel=null,qDiff=1,qArena=0;
+var QUEST_TEAM_NAMES=['New Caledonia','Bolivia','Curcao','Haiti','Kuwait','Qatar','Bahrain','Indonesia','Jordan','China','Venezuela','Uzbekistan','Panama','Chile','Cape Verde','Iraq','S.Africa','Paraguay','Tunisia','Saudi Ar.','Bosnia','Algeria','Australia','Ecuador','Iran','Czechia','Scotland','Turkey','Sweden','Canada','Mexico','USA','Austria','Senegal','Norway','S.Korea','Colombia','Uruguay','Swiss','Morocco','Croatia','Belgium','Japan','Germany','England','Portugal','Brazil','Spain','Argentina'];
+var QUEST_RATINGS=[30,38,40,42,42,43,44,45,48,50,52,52,53,55,55,55,57,58,58,59,60,62,63,64,65,65,65,66,69,70,71,72,72,73,74,75,76,77,78,79,80,82,83,87,88,91,93,97,98];
+var QUEST_TEAMS=[];
+(function(){QUEST_TEAM_NAMES.forEach(function(name,qi){var found=null;for(var k=0;k<TEAMS.length;k++){if(TEAMS[k].n===name){found=TEAMS[k];break;}}if(!found){for(var k2=0;k2<TEAMS.length;k2++){if(TEAMS[k2].r===QUEST_RATINGS[qi]){found=TEAMS[k2];break;}}}QUEST_TEAMS.push({f:found?found.f:'?',n:name,r:QUEST_RATINGS[qi],boss:qi===48});});})();
+function questKey(d){return 'wco26_q_'+d;}
+function questLoad(d){try{var v=localStorage.getItem(questKey(d));return v?parseInt(v):0;}catch(e){return 0;}}
+function questSave(d,p){
+  try{
+    localStorage.setItem(questKey(d),p);
+    var nm=document.getElementById('qn1')?document.getElementById('qn1').value.trim():'';
+    localStorage.setItem('wco26_q_setup',JSON.stringify({diff:qDiff,sel:qSel,arena:qArena,name:nm}));
+  }catch(e){}
+}
+function questClear(d){try{localStorage.removeItem(questKey(d));localStorage.removeItem('wco26_q_setup');}catch(e){}}
+function questLoadSetup(){
+  try{
+    var v=localStorage.getItem('wco26_q_setup');if(!v)return;
+    var s=JSON.parse(v);
+    if(s.diff!==undefined)qDiff=s.diff;
+    if(s.sel!==null&&s.sel!==undefined)qSel=s.sel;
+    if(s.arena!==undefined)qArena=s.arena;
+    if(s.name&&document.getElementById('qn1'))document.getElementById('qn1').value=s.name;
+  }catch(e){}
+}
+function initQuestSetup(){
+  var s=document.getElementById('qt1');
+  s.innerHTML='<option value="">Select Country</option>';
+  TEAMS.forEach(function(t,i){var o=document.createElement('option');o.value=i;o.textContent=t.f+' '+t.n;s.appendChild(o);});
+  s.onchange=function(){qSel=this.value!==''?parseInt(this.value):null;};
+  // Arena buttons using abtn class (same as main menu)
+  var ar=document.getElementById('q-arena-row');ar.innerHTML='';
+  [{f:'🇺🇸',n:'USA'},{f:'🇨🇦',n:'Canada'},{f:'🇲🇽',n:'Mexico'}].forEach(function(a,i){
+    var b=document.createElement('button');
+    b.className='abtn'+(i===qArena?' sel':'');
+    b.textContent=a.f+' '+a.n;
+    b.onclick=function(){qArena=i;ar.querySelectorAll('.abtn').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');};
+    ar.appendChild(b);
+  });
+  // Difficulty buttons using dbtn class (same as main menu)
+  var dr=document.getElementById('q-diff-row');dr.innerHTML='';
+  ['AMATEUR','SEMI-PRO','WORLD CLASS'].forEach(function(d,i){
+    var b=document.createElement('button');
+    b.className='dbtn'+(i===qDiff?' sel':'');
+    b.textContent=d;
+    b.onclick=function(){qDiff=i;dr.querySelectorAll('.dbtn').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');};
+    dr.appendChild(b);
   });
 }
+var QT_CELL_H=69;
+function renderQuestTower(){
+  var cur=QUEST_TEAMS[Math.min(questProgress,QUEST_TEAMS.length-1)];
+  var diffNames=['Amateur','Semi-Pro','World Class'];
+  var playerName=(document.getElementById('qn1').value.trim()||'PLAYER').toUpperCase();
+  var playerFlag=qSel!==null?TEAMS[qSel].f:'?';
+  document.getElementById('qt-sub').textContent=diffNames[questDiff]+' - '+questProgress+'/49';
+  var tower=document.getElementById('qt-tower');var pcol=document.getElementById('qt-pcol');
+  tower.innerHTML='';pcol.innerHTML='';
+  var cS='width:72px;height:66px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;position:relative;';
+  for(var i=0;i<QUEST_TEAMS.length;i++){
+    var t=QUEST_TEAMS[i];
+    var state=i<questProgress?'beaten':i===questProgress?'current':'locked';
+    var bg,brd;
+    if(state==='beaten'){bg='rgba(0,50,0,0.75)';brd='1px solid rgba(0,150,0,0.3)';}
+    else if(state==='current'){bg=t.boss?'rgba(80,0,0,0.6)':'rgba(255,180,0,0.15)';brd=t.boss?'2px solid rgba(255,40,40,0.6)':'2px solid rgba(255,200,0,0.7)';}
+    else{bg='rgba(15,15,25,0.8)';brd='1px solid rgba(60,60,80,0.3)';}
+    var cell=document.createElement('div');cell.style.cssText=cS+'background:'+bg+';border:'+brd+';'+(state==='locked'?'opacity:0.4;':'');
+    if(state==='beaten'){var ck=document.createElement('div');ck.style.cssText='position:absolute;top:2px;right:3px;font-size:9px;color:rgba(0,220,0,0.8);';ck.textContent='v';cell.appendChild(ck);}
+    var cf=document.createElement('div');cf.style.cssText='font-size:26px;line-height:1;'+(state==='locked'?'opacity:0.2;':'');cf.textContent=state==='locked'?'?':t.f;
+    var cn=document.createElement('div');cn.style.cssText='font-size:8px;color:rgba(255,255,255,0.5);text-align:center;width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';cn.textContent=state==='locked'?'???':t.n;
+    var cl=document.createElement('div');cl.style.cssText='font-size:8px;color:rgba(255,255,255,0.3);';cl.textContent=state==='locked'?'':'Lv.'+(i+1);
+    cell.appendChild(cf);cell.appendChild(cn);cell.appendChild(cl);tower.appendChild(cell);
+    var pEl=document.createElement('div');
+    if(i===questProgress){
+      pEl.style.cssText=cS+'background:rgba(0,30,60,0.9);border:2px solid rgba(91,200,255,0.6);box-shadow:0 0 14px rgba(91,200,255,0.3);';
+      var pf=document.createElement('div');pf.style.cssText='font-size:26px;line-height:1;';pf.textContent=playerFlag;
+      var pn=document.createElement('div');pn.style.cssText='font-size:8px;color:#5bc8ff;text-align:center;width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';pn.textContent=playerName;
+      var pl2=document.createElement('div');pl2.style.cssText='font-size:8px;color:rgba(255,204,0,0.7);';pl2.textContent='Lv.'+(questProgress+1);
+      var ar2=document.createElement('div');ar2.style.cssText='position:absolute;left:100%;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid rgba(91,200,255,0.6);';
+      pEl.appendChild(pf);pEl.appendChild(pn);pEl.appendChild(pl2);pEl.appendChild(ar2);
+    } else {pEl.style.cssText='width:72px;height:66px;flex-shrink:0;visibility:hidden;';}
+    pcol.appendChild(pEl);
+  }
+  setTimeout(positionQuestTower,50);
+}
+function positionQuestTower(){
+  var mover=document.getElementById('qt-mover');var vp=document.getElementById('qt-viewport');
+  if(!mover||!vp)return;
+  var vpH=vp.offsetHeight;var totalH=QUEST_TEAMS.length*QT_CELL_H;
+  var fromBottom=questProgress*QT_CELL_H;
+  var offset=totalH-fromBottom-vpH/2-QT_CELL_H/2;
+  offset=Math.max(0,Math.min(totalH-vpH,offset));
+  mover.style.transform='translateY(-'+offset+'px)';
+}
+function startQuestMatch(){_qEndFired=false;
+  var t=QUEST_TEAMS[questProgress];var tIdx=-1;
+  for(var i=0;i<TEAMS.length;i++){if(TEAMS[i].n===t.n||TEAMS[i].r===t.r){tIdx=i;break;}}
+  if(tIdx<0)tIdx=0;
+  sel[0]=qSel;sel[1]=tIdx;aiDiff=questDiff;activeArena=qArena;
+  var n1=document.getElementById('qn1').value.trim()||'PLAYER';
+  pNames=[n1.toUpperCase(),t.n];
+  hudScoreData[0]={score:0,name:pNames[0],flag:TEAMS[qSel].f,color:'#5bc8ff'};
+  hudScoreData[1]={score:0,name:t.n,flag:t.f,color:'#ff6b6b'};
+  try{document.getElementById('hf1').textContent=TEAMS[qSel].f;}catch(e){}
+  try{document.getElementById('hf2').textContent=t.f;}catch(e){}
+  try{document.getElementById('hn1').textContent=pNames[0];}catch(e){}
+  try{document.getElementById('hn2').textContent=t.n;}catch(e){}
+  hideScreen('s-quest-tower');startCD();
+}
+function onQuestResult(won,draw){
+  var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.display='none';
+  hideSC();
+  if(draw){renderQuestTower();showScreen('s-quest-tower');return;}
+  if(won){questProgress++;questSave(questDiff,questProgress);if(questProgress>=QUEST_TEAMS.length){showQuestChampion();return;}}
+  else{questProgress=0;questClear(questDiff);}
+  renderQuestTower();showScreen('s-quest-tower');
+}
+function showQuestChampion(){
+  var qs=document.getElementById('s-quest-tower');qs.innerHTML='';
+  var w=document.createElement('div');w.style.cssText='width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(ellipse at 50% 40%,#2a1500,#000);';
+  [['font-size:56px;','[TROPHY]'],['font-size:22px;letter-spacing:4px;color:#ffd700;','WORLD CHAMPION'],['font-size:10px;color:rgba(255,204,0,0.5);','All 49 nations defeated'],['font-size:32px;',qSel!==null?TEAMS[qSel].f:'?'],['font-size:12px;color:rgba(255,255,255,0.4);',document.getElementById('qn1').value.trim()||'PLAYER']].forEach(function(d){var e=document.createElement('div');e.style.cssText=d[0];e.textContent=d[1];w.appendChild(e);});
+  var btn=document.createElement('button');btn.style.cssText='margin-top:8px;background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:10px;padding:12px 32px;font-size:13px;color:#000;cursor:pointer;';btn.textContent='MAIN MENU';btn.onclick=exitQuest;w.appendChild(btn);qs.appendChild(w);
+}
+function exitQuest(){questMode=false;var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.display='none';hideSC();hideScreen('s-quest-tower');showScreen('s-mode');}
+var _qEnd=endGame;
+var _qEndFired=false;
+endGame=function(){
+  var _qs0=score[0],_qs1=score[1];
+  _qEnd();if(!questMode)return;
+  if(_qEndFired)return;
+  _qEndFired=true;
+  var won=_qs0>_qs1;
+  var draw=_qs0===_qs1;
+  // hide normal buttons in quest mode
+  setTimeout(function(){
+    var se=document.getElementById('s-end');
+    // remove any existing quest buttons first
+    se.querySelectorAll('.quest-btn,.quest-exit').forEach(function(el){el.remove();});
+    var btnRm=document.getElementById('btn-rm');
+    var btnMenu=document.querySelector('#s-end .btn-sec');
+    var btnShare=document.getElementById('btn-share-result');
+    if(btnRm)btnRm.style.display='none';
+    if(btnMenu)btnMenu.style.display='none';
+    if(btnShare)btnShare.style.display='none';
+    var b=document.createElement('button');
+    b.className='btn-main quest-btn';
+    b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;';
+    b.textContent=won?'NEXT CHALLENGE':'REPLAY';
+    b.onclick=function(){
+      if(btnRm)btnRm.style.display='';
+      if(btnMenu)btnMenu.style.display='';
+      if(btnShare)btnShare.style.display='';
+      hideScreen('s-end');
+      onQuestResult(won,draw);
+    };
+    se.appendChild(b);
+    // EXIT QUEST button
+    var bExit=document.createElement('button');
+    bExit.className='btn-sec quest-exit';
+    bExit.style.cssText='margin-top:6px;padding:8px 24px;font-size:11px;letter-spacing:2px;';
+    bExit.textContent='EXIT QUEST';
+    bExit.onclick=function(){
+      if(btnRm)btnRm.style.display='';
+      if(btnMenu)btnMenu.style.display='';
+      if(btnShare)btnShare.style.display='';
+      var hm3=document.getElementById('humillacion-mundial');if(hm3)hm3.style.display='none';
+      hideScreen('s-end');
+      exitQuest();
+    };
+    se.appendChild(bExit);
+  },100);
+};
 </script>
 
 </body>
