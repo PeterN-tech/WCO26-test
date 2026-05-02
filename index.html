@@ -430,7 +430,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   <div id="fulltime-lbl" style="font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.3);text-transform:uppercase;">FULL TIME</div>
   <div id="endscore">0 - 0</div>
   <div id="endlbl" class="el-draw">DRAW</div>
-  <div id="humillacion-mundial" style="display:none;font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffd700;text-shadow:0 0 24px rgba(255,215,0,0.7);margin-bottom:5px;text-align:center;">HUMILLACION MUNDIAL</div>
+  <div id="humillacion-mundial" style="display:none;font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffd700;text-shadow:0 0 24px rgba(255,215,0,0.7);margin-bottom:5px;text-align:center;"></div>
   <button class="btn-main" id="btn-share-result" style="background:linear-gradient(135deg,#1565c0,#1e88e5);margin-bottom:5px;padding:10px 28px;font-size:12px;letter-spacing:2px;"> SHARE RESULT</button>
   <button class="btn-main" id="btn-rm" style="padding:10px 28px;font-size:12px;letter-spacing:2px;"> REMATCH</button>
   <button class="btn-sec" id="btn-menu" style="margin-top:5px;padding:7px 20px;font-size:9px;">MAIN MENU</button>
@@ -505,7 +505,7 @@ function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return H();}
+function PITCH_B(){return Math.round(H()*0.98);}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
@@ -1203,7 +1203,7 @@ function drawCanvasScore(){
     var tx=flagCX-flagHalfW-cw;
     ctx.fillStyle='rgba(0,0,0,0.55)';ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,4);ctx.fill();
     ctx.strokeStyle='rgba(255,204,0,0.4)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,4);ctx.stroke();
-    var tSz=Math.round(ch*0.62);ctx.font='900 '+tSz+'px Arial';
+    var tSz=Math.round(ch*0.50);ctx.font='900 '+tSz+'px Arial';
     while(ctx.measureText(timerTxt).width>cw-4&&tSz>6){tSz--;ctx.font='900 '+tSz+'px Arial';}
     ctx.fillStyle=timerColor||'#fff';ctx.shadowColor=timerColor||'#fff';ctx.shadowBlur=4;
     ctx.textAlign='center';ctx.fillText(timerTxt,tx+cw/2,ty+ch*0.80);ctx.shadowBlur=0;
@@ -1214,7 +1214,7 @@ function drawCanvasScore(){
     ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(px,ty,cw,ch,4);ctx.stroke();
     // larger pause bars
     var pcx=px+cw/2,pcy=ty+ch/2;
-    var bw=ch*0.18,bh=ch*0.65,bgap=ch*0.12;
+    var bw=ch*0.14,bh=ch*0.52,bgap=ch*0.10;
     ctx.fillStyle='rgba(255,255,255,0.85)';
     ctx.fillRect(pcx-bgap-bw,pcy-bh/2,bw,bh);
     ctx.fillRect(pcx+bgap,pcy-bh/2,bw,bh);
@@ -1596,7 +1596,7 @@ function endGame(){
   else if(s0>s1){lbl.textContent=pNames[0]+' WINS! \u2B50';lbl.className='el-win';}
   else{lbl.textContent=pNames[1]+' WINS!';lbl.className='el-win';}
   var isFullSweep=(s0===0||s1===0)&&(s0!==s1)&&phase==='extra2';
-  var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.display=isFullSweep?'block':'none';
+  var hm=document.getElementById('humillacion-mundial');if(hm){hm.style.display=isFullSweep?'block':'none';if(isFullSweep)hm.textContent=HUMIL_TEXT[activeArena]||'WORLD HUMILIATION';}
   showScreen('s-end');
   if(isFullSweep){var losingSide=s0>s1?0:1;var charType=selectedArena;showSC(losingSide,charType);}
 }
