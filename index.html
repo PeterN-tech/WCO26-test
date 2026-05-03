@@ -288,10 +288,10 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 
 <div class="screen off" id="s-quest-tower" style="background:#0a0010;overflow:hidden;">
   <div id="qt-inner" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 30%,#200030 0%,#0a0010 50%,#150500 100%);padding-top:0;">
-    <div style="font-size:14px;letter-spacing:4px;color:rgba(220,220,220,0.7);margin:10px 0 4px;">CHOOSE YOUR DESTINY</div>
-    <div id="qt-sub" style="font-size:10px;letter-spacing:2px;color:rgba(255,204,0,0.5);margin-bottom:6px;"></div>
+    <div style="font-size:11px;letter-spacing:3px;color:rgba(220,220,220,0.7);margin:4px 0 2px;">CHOOSE YOUR DESTINY</div>
+    <div id="qt-sub" style="font-size:8px;letter-spacing:2px;color:rgba(255,204,0,0.5);margin-bottom:2px;"></div>
     <div style="flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:0 8px;width:100%;overflow:hidden;">
-      <div id="qt-viewport" style="overflow:hidden;height:calc(var(--vh, 1vh) * 100 - 110px);position:relative;display:flex;flex-direction:row;gap:6px;">
+      <div id="qt-viewport" style="overflow:hidden;height:calc(var(--vh, 1vh) * 100 - 80px);position:relative;display:flex;flex-direction:row;gap:6px;">
         <div id="qt-mover" style="display:flex;flex-direction:row;gap:6px;align-items:flex-start;transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1);">
           <div id="qt-pcol" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
           <div id="qt-tower" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
@@ -507,7 +507,7 @@ function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return Math.round(H()*0.98);}
+function PITCH_B(){return H();}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
@@ -593,9 +593,9 @@ function drawTribunes(){
 
 var TEAMS=[
 {n:"Austria",f:"\uD83C\uDDE6\uD83C\uDDF9",r:72},{n:"Belgium",f:"\uD83C\uDDE7\uD83C\uDDEA",r:82},{n:"Bosnia & Herz.",f:"\uD83C\uDDE7\uD83C\uDDE6",r:60},
-{n:"Croatia",f:"\uD83C\uDDED\uD83C\uDDF7",r:80},{n:"Czechia",f:"\uD83C\uDDE8\uD83C\uDDFF",r:65},{n:"England",f:"ENG",r:88},
+{n:"Croatia",f:"\uD83C\uDDED\uD83C\uDDF7",r:80},{n:"Czechia",f:"\uD83C\uDDE8\uD83C\uDDFF",r:65},{n:"England",f:"\uD83C\uDDEC\uD83C\uDDE7",r:88},
 {n:"France",f:"\uD83C\uDDEB\uD83C\uDDF7",r:96},{n:"Germany",f:"\uD83C\uDDE9\uD83C\uDDEA",r:87},{n:"Netherlands",f:"\uD83C\uDDF3\uD83C\uDDF1",r:86},
-{n:"Norway",f:"\uD83C\uDDF3\uD83C\uDDF4",r:74},{n:"Portugal",f:"\uD83C\uDDF5\uD83C\uDDF9",r:91},{n:"Scotland",f:"SCO",r:65},
+{n:"Norway",f:"\uD83C\uDDF3\uD83C\uDDF4",r:74},{n:"Portugal",f:"\uD83C\uDDF5\uD83C\uDDF9",r:91},{n:"Scotland",f:"\uD83C\uDDF8\uD83C\uDDE7",r:65},
 {n:"Spain",f:"\uD83C\uDDEA\uD83C\uDDF8",r:97},{n:"Sweden",f:"\uD83C\uDDF8\uD83C\uDDEA",r:69},{n:"Switzerland",f:"\uD83C\uDDE8\uD83C\uDDED",r:78},{n:"Turkey",f:"\uD83C\uDDF9\uD83C\uDDF7",r:66},
 {n:"Canada",f:"\uD83C\uDDE8\uD83C\uDDE6",r:70},{n:"Mexico",f:"\uD83C\uDDF2\uD83C\uDDFD",r:71},{n:"USA",f:"\uD83C\uDDFA\uD83C\uDDF8",r:72},
 {n:"Cura\u00E7ao",f:"\uD83C\uDDE8\uD83C\uDDFC",r:40},{n:"Haiti",f:"\uD83C\uDDED\uD83C\uDDF9",r:42},{n:"Panama",f:"\uD83C\uDDF5\uD83C\uDDE6",r:53},
@@ -1011,7 +1011,7 @@ function updateAI(dt){
         // CPU shoots LEFT (toward player goal), so direction is Math.PI
         var bAngle=Math.atan2(dy,dx);
         var ad=Math.abs(bAngle-Math.PI);if(ad>Math.PI)ad=Math.PI*2-ad;
-        if(ad<=.14)inC2.push({b:b,dist:d});
+        if(ad<=.18)inC2.push({b:b,dist:d});
       });
       inC2.sort(function(a,b){return a.dist-b.dist;});
       inC2.slice(0,2).forEach(function(t){
@@ -1474,7 +1474,7 @@ function fireShotRelease(){
   kickAnim=6;var po=pOrigin(0,aimY);
   if(held>=3){
     var alive=balls.filter(function(b){return !b.scored;}),bonus=alive.length<=1?2.6:1,str=10*tm[0].power*bonus;
-    var inC=[];balls.forEach(function(b){if(b.scored||b.isBonus)return;var dx=b.x-po.x,dy=b.y-po.y,d=Math.hypot(dx,dy);if(d<1)return;var ad=Math.abs(Math.atan2(dy,dx));if(ad>Math.PI)ad=Math.PI*2-ad;if(ad<=.14)inC.push({b:b,dist:d});});
+    var inC=[];balls.forEach(function(b){if(b.scored)return;var dx=b.x-po.x,dy=b.y-po.y,d=Math.hypot(dx,dy);if(d<1)return;var ad=Math.abs(Math.atan2(dy,dx));if(ad>Math.PI)ad=Math.PI*2-ad;if(ad<=.14)inC.push({b:b,dist:d});});
     inC.sort(function(a,b){return a.dist-b.dist;});
     inC.slice(0,2).forEach(function(t){var dx=t.b.x-po.x,dy=t.b.y-po.y,d=t.dist,nx=dx/d,ny=dy/d,dot=nx;t.b.vx+=(dot*str)+((nx-dot)*str*.65);t.b.vy+=(ny*str*.65);t.b.powerHit=2.5;t.b.powerTrail=[];t.b.meteor=2.5;var sp=Math.hypot(t.b.vx,t.b.vy);if(sp>28){t.b.vx=t.b.vx/sp*28;t.b.vy=t.b.vy/sp*28;}});
     pulses.push(new Pulse(0,aimY,str));
