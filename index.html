@@ -1640,23 +1640,13 @@ document.getElementById('btn-share-result').addEventListener('click',function(){
 document.getElementById('btn-close-share').addEventListener('click',function(){document.getElementById('share-overlay').style.display='none';var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.zIndex='';hideScreen('s-end');hideSC();showScreen('s-mode');gState='menu';});
 document.getElementById('btn-rm-share').addEventListener('click',function(){document.getElementById('share-overlay').style.display='none';hideScreen('s-end');startCD();});
 document.getElementById('btn-do-share').addEventListener('click',function(){
-  generateShareCard();
-  var card=document.getElementById('share-card');
-  if(!card)return;
-  if(typeof html2canvas==='undefined')return;
-  html2canvas(card,{backgroundColor:'#080d18',scale:2,useCORS:true,logging:false}).then(function(canvas){
-    canvas.toBlob(function(blob){
-      if(!blob)return;
-      var file=new File([blob],'wco26-result.png',{type:'image/png'});
-      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-        navigator.share({files:[file],title:'World Cup Oracle 2026'}).catch(function(){
-          var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
-        });
-      } else {
-        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
-      }
-    },'image/png');
-  });
+  var s0=score[0],s1=score[1];
+  var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
+  var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
+  var txt=p1+' '+s0+' - '+s1+' '+p2+' | World Cup Oracle 2026\nworldcuporacle.com';
+  if(navigator.share){
+    try{navigator.share({title:'World Cup Oracle 2026',text:txt,url:'https://petern-tech.github.io/worldcuporacle26'});}catch(e){}
+  }
 });
 
 resize();
