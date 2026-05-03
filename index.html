@@ -204,6 +204,8 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 .rotate-sub{font-size:10px;letter-spacing:2px;color:rgba(255,204,0,0.5);text-transform:uppercase;text-align:center;}
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 <body>
 <div id="rotate-overlay">
@@ -1639,19 +1641,22 @@ document.getElementById('btn-close-share').addEventListener('click',function(){d
 document.getElementById('btn-rm-share').addEventListener('click',function(){document.getElementById('share-overlay').style.display='none';hideScreen('s-end');startCD();});
 document.getElementById('btn-do-share').addEventListener('click',function(){
   generateShareCard();
-  setTimeout(function(){
-    scCanvas.toBlob(function(blob){
+  var card=document.getElementById('share-card');
+  if(!card)return;
+  if(typeof html2canvas==='undefined')return;
+  html2canvas(card,{backgroundColor:'#080d18',scale:2,useCORS:true,logging:false}).then(function(canvas){
+    canvas.toBlob(function(blob){
       if(!blob)return;
-      var file=new File([blob],'result.png',{type:'image/png'});
+      var file=new File([blob],'wco26-result.png',{type:'image/png'});
       if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
         navigator.share({files:[file],title:'World Cup Oracle 2026'}).catch(function(){
-          var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+          var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
         });
       } else {
-        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
       }
     },'image/png');
-  },80);
+  });
 });
 
 resize();
