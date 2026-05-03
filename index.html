@@ -507,7 +507,7 @@ function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return H();}
+function PITCH_B(){return Math.round(H()*0.98);}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
@@ -539,12 +539,21 @@ if(window.visualViewport){
 function positionControls(){
   var cw=CTRL_W(),bs=Math.min(cw*0.78,80);
   var centerY=PITCH_CY();
+  // safe area insets for iPhone notch/Dynamic Island in landscape
+  var safeL=0,safeR=0;
+  try{
+    var testEl=document.createElement('div');
+    testEl.style.cssText='position:fixed;top:0;left:0;width:0;height:0;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);';
+    document.body.appendChild(testEl);
+    var cs=window.getComputedStyle(testEl);
+    safeL=parseFloat(cs.paddingLeft)||0;
+    safeR=parseFloat(cs.paddingRight)||0;
+    document.body.removeChild(testEl);
+  }catch(e){}
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:4px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL+4)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-4)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
-  // pause button - small, top right corner of pitch
-  
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-4-safeR)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
@@ -1640,13 +1649,47 @@ document.getElementById('btn-share-result').addEventListener('click',function(){
 document.getElementById('btn-close-share').addEventListener('click',function(){document.getElementById('share-overlay').style.display='none';var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.zIndex='';hideScreen('s-end');hideSC();showScreen('s-mode');gState='menu';});
 document.getElementById('btn-rm-share').addEventListener('click',function(){document.getElementById('share-overlay').style.display='none';hideScreen('s-end');startCD();});
 document.getElementById('btn-do-share').addEventListener('click',function(){
-  var s0=score[0],s1=score[1];
-  var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
-  var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
-  var txt=p1+' '+s0+' - '+s1+' '+p2+' | World Cup Oracle 2026\nworldcuporacle.com';
-  if(navigator.share){
-    try{navigator.share({title:'World Cup Oracle 2026',text:txt,url:'https://petern-tech.github.io/worldcuporacle26'});}catch(e){}
+  var card=document.getElementById('share-card');
+  if(!card){return;}
+  if(typeof html2canvas==='undefined'){
+    // fallback text share
+    var s0=score[0],s1=score[1];
+    var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
+    var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
+    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://petern-tech.github.io/WCO26-test/'});
+    return;
   }
+  html2canvas(card,{
+    backgroundColor:'#080d18',
+    scale:2,
+    useCORS:true,
+    allowTaint:true,
+    logging:false,
+    ignoreElements:function(el){return el.id==='sc-glow';}
+  }).then(function(canvas){
+    canvas.toBlob(function(blob){
+      if(!blob)return;
+      var file=new File([blob],'wco26-result.png',{type:'image/png'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        navigator.share({
+          files:[file],
+          title:'World Cup Oracle 2026',
+          url:'https://petern-tech.github.io/WCO26-test/'
+        }).catch(function(){
+          // fallback download
+          var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+        });
+      } else {
+        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+      }
+    },'image/png');
+  }).catch(function(){
+    // fallback text share
+    var s0=score[0],s1=score[1];
+    var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
+    var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
+    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://petern-tech.github.io/WCO26-test/'});
+  });
 });
 
 resize();
