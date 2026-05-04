@@ -291,7 +291,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
     <div style="font-size:11px;letter-spacing:3px;color:rgba(220,220,220,0.7);margin:4px 0 2px;">CHOOSE YOUR DESTINY</div>
     <div id="qt-sub" style="font-size:8px;letter-spacing:2px;color:rgba(255,204,0,0.5);margin-bottom:2px;"></div>
     <div style="flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:0 8px;width:100%;overflow:hidden;">
-      <div id="qt-viewport" style="overflow:hidden;height:calc(var(--vh, 1vh) * 100 - 80px);position:relative;display:flex;flex-direction:row;gap:6px;">
+      <div id="qt-viewport" style="overflow:hidden;height:calc(var(--vh, 1vh) * 100 - 100px);position:relative;display:flex;flex-direction:row;gap:6px;overflow:hidden;">
         <div id="qt-mover" style="display:flex;flex-direction:row;gap:6px;align-items:flex-start;transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1);">
           <div id="qt-pcol" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
           <div id="qt-tower" style="display:flex;flex-direction:column-reverse;gap:3px;"></div>
@@ -1210,22 +1210,25 @@ function drawCanvasScore(){
     var ch=Math.round(topH*0.82);
     var ty=Math.round((pT-ch)/2);
 
-    // TIMER card — immediately left of flag
+    // TIMER card B — pill shape, gold, centered
     var tx=flagCX-flagHalfW-cw;
-    ctx.fillStyle='rgba(0,0,0,0.55)';ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,4);ctx.fill();
-    ctx.strokeStyle='rgba(255,204,0,0.4)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,4);ctx.stroke();
+    ctx.fillStyle='rgba(0,0,0,0.75)';ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,ch/2);ctx.fill();
+    ctx.strokeStyle='rgba(255,204,0,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,ch/2);ctx.stroke();
     var tSz=Math.round(ch*0.50);ctx.font='900 '+tSz+'px Arial';
-    while(ctx.measureText(timerTxt).width>cw-4&&tSz>6){tSz--;ctx.font='900 '+tSz+'px Arial';}
-    ctx.fillStyle=timerColor||'#fff';ctx.shadowColor=timerColor||'#fff';ctx.shadowBlur=4;
-    ctx.textAlign='center';ctx.fillText(timerTxt,tx+cw/2,ty+ch*0.80);ctx.shadowBlur=0;
+    while(ctx.measureText(timerTxt).width>cw-8&&tSz>6){tSz--;ctx.font='900 '+tSz+'px Arial';}
+    ctx.fillStyle='#ffd700';ctx.shadowColor='rgba(255,215,0,0.5)';ctx.shadowBlur=8;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(timerTxt,tx+cw/2,ty+ch/2);
+    ctx.shadowBlur=0;ctx.textBaseline='alphabetic';
 
-    // PAUSE card right of flag
+    // PAUSE card B — pill with circle + bars
     var px=flagCX+flagHalfW;
-    ctx.fillStyle='rgba(0,0,0,0.55)';ctx.beginPath();ctx.roundRect(px,ty,cw,ch,4);ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(px,ty,cw,ch,4);ctx.stroke();
-    // larger pause bars
-    var pcx=px+cw/2,pcy=ty+ch/2;
-    var bw=ch*0.14,bh=ch*0.52,bgap=ch*0.10;
+    ctx.fillStyle='rgba(0,0,0,0.75)';ctx.beginPath();ctx.roundRect(px,ty,cw,ch,ch/2);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(px,ty,cw,ch,ch/2);ctx.stroke();
+    var pcx=px+cw/2,pcy=ty+ch/2,pr=ch*0.36;
+    ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(pcx,pcy,pr,0,Math.PI*2);ctx.stroke();
+    var bw=ch*0.10,bh=ch*0.40,bgap=ch*0.09;
     ctx.fillStyle='rgba(255,255,255,0.85)';
     ctx.fillRect(pcx-bgap-bw,pcy-bh/2,bw,bh);
     ctx.fillRect(pcx+bgap,pcy-bh/2,bw,bh);
@@ -2079,7 +2082,7 @@ rotateAd();setInterval(rotateAd,8000);
 function checkOrientation(){var overlay=document.getElementById('rotate-overlay');var isPortrait=window.innerWidth<window.innerHeight;var inGame=(gState==='countdown'||gState==='playing');var inTower=document.getElementById('s-quest-tower')&&!document.getElementById('s-quest-tower').classList.contains('off');if(isPortrait&&(inGame||inTower)){overlay.classList.add('show');}else{overlay.classList.remove('show');}}
 checkOrientation();
 window.addEventListener('resize',checkOrientation);
-window.addEventListener('orientationchange',function(){setTimeout(checkOrientation,150);});
+window.addEventListener('orientationchange',function(){setTimeout(checkOrientation,150);setTimeout(function(){if(questMode&&document.getElementById('s-quest-tower')&&!document.getElementById('s-quest-tower').classList.contains('off')){renderQuestTower();}},300);});
 
 // == QUEST MODE ==
 var questMode=false,questProgress=0,questDiff=1;
@@ -2133,6 +2136,10 @@ function initQuestSetup(){
   });
 }
 var QT_CELL_H=69;
+function getQTCellH(){
+  // smaller cells in landscape to fit more on screen
+  return window.innerWidth>window.innerHeight ? 48 : 69;
+}
 function renderQuestTower(){
   var cur=QUEST_TEAMS[Math.min(questProgress,QUEST_TEAMS.length-1)];
   var diffNames=['Amateur','Semi-Pro','World Class'];
@@ -2141,7 +2148,7 @@ function renderQuestTower(){
   document.getElementById('qt-sub').textContent=diffNames[questDiff]+' - '+questProgress+'/49';
   var tower=document.getElementById('qt-tower');var pcol=document.getElementById('qt-pcol');
   tower.innerHTML='';pcol.innerHTML='';
-  var cS='width:72px;height:66px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;position:relative;';
+  var cellH=getQTCellH();var cellW=Math.round(cellH*1.09);var cS='width:'+cellW+'px;height:'+cellH+'px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;position:relative;';
   for(var i=0;i<QUEST_TEAMS.length;i++){
     var t=QUEST_TEAMS[i];
     var state=i<questProgress?'beaten':i===questProgress?'current':'locked';
@@ -2151,19 +2158,19 @@ function renderQuestTower(){
     else{bg='rgba(15,15,25,0.8)';brd='1px solid rgba(60,60,80,0.3)';}
     var cell=document.createElement('div');cell.style.cssText=cS+'background:'+bg+';border:'+brd+';'+(state==='locked'?'opacity:0.4;':'');
     if(state==='beaten'){var ck=document.createElement('div');ck.style.cssText='position:absolute;top:2px;right:3px;font-size:9px;color:rgba(0,220,0,0.8);';ck.textContent='v';cell.appendChild(ck);}
-    var cf=document.createElement('div');cf.style.cssText='font-size:26px;line-height:1;'+(state==='locked'?'opacity:0.2;':'');cf.textContent=state==='locked'?'?':t.f;
-    var cn=document.createElement('div');cn.style.cssText='font-size:8px;color:rgba(255,255,255,0.5);text-align:center;width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';cn.textContent=state==='locked'?'???':t.n;
-    var cl=document.createElement('div');cl.style.cssText='font-size:8px;color:rgba(255,255,255,0.3);';cl.textContent=state==='locked'?'':'Lv.'+(i+1);
+    var cf=document.createElement('div');cf.style.cssText='font-size:'+Math.round(cellH*0.39)+'px;line-height:1;'+(state==='locked'?'opacity:0.2;':'');cf.textContent=state==='locked'?'?':t.f;
+    var cn=document.createElement('div');cn.style.cssText='font-size:'+Math.round(cellH*0.12)+'px;color:rgba(255,255,255,0.5);text-align:center;width:'+(cellW-4)+'px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';cn.textContent=state==='locked'?'???':t.n;
+    var cl=document.createElement('div');cl.style.cssText='font-size:'+Math.round(cellH*0.12)+'px;color:rgba(255,255,255,0.3);';cl.textContent=state==='locked'?'':'Lv.'+(i+1);
     cell.appendChild(cf);cell.appendChild(cn);cell.appendChild(cl);tower.appendChild(cell);
     var pEl=document.createElement('div');
     if(i===questProgress){
       pEl.style.cssText=cS+'background:rgba(0,30,60,0.9);border:2px solid rgba(91,200,255,0.6);box-shadow:0 0 14px rgba(91,200,255,0.3);';
-      var pf=document.createElement('div');pf.style.cssText='font-size:26px;line-height:1;';pf.textContent=playerFlag;
-      var pn=document.createElement('div');pn.style.cssText='font-size:8px;color:#5bc8ff;text-align:center;width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';pn.textContent=playerName;
-      var pl2=document.createElement('div');pl2.style.cssText='font-size:8px;color:rgba(255,204,0,0.7);';pl2.textContent='Lv.'+(questProgress+1);
+      var pf=document.createElement('div');pf.style.cssText='font-size:'+Math.round(cellH*0.39)+'px;line-height:1;';pf.textContent=playerFlag;
+      var pn=document.createElement('div');pn.style.cssText='font-size:'+Math.round(cellH*0.12)+'px;color:#5bc8ff;text-align:center;width:'+(cellW-4)+'px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';pn.textContent=playerName;
+      var pl2=document.createElement('div');pl2.style.cssText='font-size:'+Math.round(cellH*0.12)+'px;color:rgba(255,204,0,0.7);';pl2.textContent='Lv.'+(questProgress+1);
       var ar2=document.createElement('div');ar2.style.cssText='position:absolute;left:100%;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid rgba(91,200,255,0.6);';
       pEl.appendChild(pf);pEl.appendChild(pn);pEl.appendChild(pl2);pEl.appendChild(ar2);
-    } else {pEl.style.cssText='width:72px;height:66px;flex-shrink:0;visibility:hidden;';}
+    } else {pEl.style.cssText='width:'+cellW+'px;height:'+cellH+'px;flex-shrink:0;visibility:hidden;';}
     pcol.appendChild(pEl);
   }
   setTimeout(positionQuestTower,50);
@@ -2171,10 +2178,11 @@ function renderQuestTower(){
 function positionQuestTower(){
   var mover=document.getElementById('qt-mover');var vp=document.getElementById('qt-viewport');
   if(!mover||!vp)return;
-  var vpH=vp.offsetHeight;var totalH=QUEST_TEAMS.length*QT_CELL_H;
-  var fromBottom=questProgress*QT_CELL_H;
-  var offset=totalH-fromBottom-vpH/2-QT_CELL_H/2;
-  offset=Math.max(0,Math.min(totalH-vpH,offset));
+  var ch=getQTCellH();
+  var vpH=vp.offsetHeight;var totalH=QUEST_TEAMS.length*ch;
+  var fromBottom=questProgress*ch;
+  var offset=totalH-fromBottom-vpH/2-ch/2;
+  offset=Math.max(0,Math.min(Math.max(0,totalH-vpH),offset));
   mover.style.transform='translateY(-'+offset+'px)';
 }
 function startQuestMatch(){_qEndFired=false;
