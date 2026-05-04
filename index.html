@@ -15,6 +15,8 @@
 </script>
 <title>World Cup Oracle '26</title>
 <meta name="theme-color" content="#040810">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WC Oracle">
@@ -218,7 +220,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   <div class="ad-creative" id="ad-creative-slot">
     <span class="ad-ico"></span><span class="ad-txt">AEROFLY</span><span class="ad-cta">BOOK NOW</span>
   </div>
-  <span class="ad-oracle">worldcuporacle.com</span>
+  <span class="ad-oracle">worldcuporacle26.io</span>
 
 </div>
 <canvas id="c"></canvas>
@@ -1576,7 +1578,7 @@ document.getElementById('m-btn-quick').addEventListener('click',function(){mGoSt
 document.getElementById('m-cancel-btn').addEventListener('click',function(){mGoState('default');});
 document.getElementById('m-cancel-back').addEventListener('click',function(){mGoState('default');});
 document.getElementById('m-back-btn').addEventListener('click',function(){hideScreen('s-multi');showScreen('s-mode');});
-document.getElementById('m-share-btn').addEventListener('click',function(){var code=document.getElementById('m-room-code').textContent;var txt='Join my World Cup Oracle game! Room code: '+code+' \u2014 worldcuporacle.com';if(navigator.share){try{navigator.share({title:'World Cup Oracle',text:txt});}catch(e){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);}});
+document.getElementById('m-share-btn').addEventListener('click',function(){var code=document.getElementById('m-room-code').textContent;var txt='Join my World Cup Oracle game! Room code: '+code+' \u2014 worldcuporacle26.io';if(navigator.share){try{navigator.share({title:'World Cup Oracle',text:txt});}catch(e){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);}});
 
 function startCD(){
   if(window.innerWidth<window.innerHeight){checkOrientation();var waitLandscape=function(){if(window.innerWidth>=window.innerHeight){window.removeEventListener('resize',waitLandscape);window.removeEventListener('orientationchange',waitLandscape);checkOrientation();startCD();}};window.addEventListener('resize',waitLandscape);window.addEventListener('orientationchange',waitLandscape);return;}
@@ -1660,7 +1662,7 @@ document.getElementById('btn-do-share').addEventListener('click',function(){
     var s0=score[0],s1=score[1];
     var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
     var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
-    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://petern-tech.github.io/WCO26-test/'});
+    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://worldcuporacle26.io'});
     return;
   }
   html2canvas(card,{
@@ -1678,7 +1680,7 @@ document.getElementById('btn-do-share').addEventListener('click',function(){
         navigator.share({
           files:[file],
           title:'World Cup Oracle 2026',
-          url:'https://petern-tech.github.io/WCO26-test/'
+          url:'https://worldcuporacle26.io'
         }).catch(function(){
           // fallback download
           var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wco26-result.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
@@ -1692,7 +1694,7 @@ document.getElementById('btn-do-share').addEventListener('click',function(){
     var s0=score[0],s1=score[1];
     var p1=sel[0]!==null?TEAMS[sel[0]].n:'P1';
     var p2=sel[1]!==null?TEAMS[sel[1]].n:'P2';
-    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://petern-tech.github.io/WCO26-test/'});
+    if(navigator.share)navigator.share({title:'World Cup Oracle 2026',text:p1+' '+s0+' - '+s1+' '+p2,url:'https://worldcuporacle26.io'});
   });
 });
 
