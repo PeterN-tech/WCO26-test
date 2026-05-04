@@ -438,8 +438,8 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   <button class="btn-sec" id="btn-menu" style="margin-top:5px;padding:7px 20px;font-size:9px;">MAIN MENU</button>
 </div>
 
-<div id="share-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:rgba(0,0,0,0.97);flex-direction:column;align-items:center;justify-content:center;gap:0;padding:56px 8px 8px;overflow:hidden;">
-  <div id="share-card" style="width:100%;max-width:680px;background:#080d18;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 10px 40px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;flex:1;max-height:100%;">
+<div id="share-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:rgba(0,0,0,0.97);flex-direction:column;align-items:center;justify-content:center;gap:0;padding:env(safe-area-inset-top,8px) env(safe-area-inset-right,8px) env(safe-area-inset-bottom,8px) env(safe-area-inset-left,8px);overflow:hidden;">
+  <div id="share-card" style="width:100%;max-width:680px;background:#080d18;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 10px 40px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;flex:1;max-height:calc(100vh - 80px);">
     <div style="position:absolute;inset:0;z-index:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.018) 48px,rgba(255,255,255,.018) 49px);"></div>
     <div id="sc-glow" style="position:absolute;inset:0;z-index:0;"></div>
     <div id="sc-strip" style="position:relative;z-index:2;height:3px;"></div>
