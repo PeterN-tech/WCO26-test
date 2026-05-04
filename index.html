@@ -300,6 +300,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
       <div style="display:flex;flex-direction:column;gap:8px;align-items:center;width:80px;flex-shrink:0;">
         <button onclick="startQuestMatch()" style="background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:8px;padding:14px 6px;font-size:12px;letter-spacing:1px;color:#000;cursor:pointer;width:100%;font-weight:bold;">PLAY</button>
         <div onclick="exitQuest()" style="font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.35);cursor:pointer;text-align:center;margin-top:4px;">EXIT</div>
+        <div id="qt-debug-btn" onclick="questDebugWin()" style="display:none;font-size:8px;letter-spacing:1px;color:rgba(255,100,100,0.4);cursor:pointer;text-align:center;margin-top:2px;">+1 WIN</div>
       </div>
     </div>
   </div>
@@ -2137,10 +2138,13 @@ function initQuestSetup(){
 }
 var QT_CELL_H=69;
 function getQTCellH(){
-  // smaller cells in landscape to fit more on screen
-  return window.innerWidth>window.innerHeight ? 48 : 69;
+  // 40% bigger than original
+  return window.innerWidth>window.innerHeight ? 70 : 100;
 }
 function renderQuestTower(){
+  // show debug button if ?debug in URL
+  var dbg=document.getElementById('qt-debug-btn');
+  if(dbg)dbg.style.display=window.location.search.indexOf('debug')>=0?'block':'none';
   var cur=QUEST_TEAMS[Math.min(questProgress,QUEST_TEAMS.length-1)];
   var diffNames=['Amateur','Semi-Pro','World Class'];
   var playerName=(document.getElementById('qn1').value.trim()||'PLAYER').toUpperCase();
@@ -2222,6 +2226,12 @@ function showQuestChampion(){
   var w=document.createElement('div');w.style.cssText='width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(ellipse at 50% 40%,#2a1500,#000);';
   [['font-size:56px;','[TROPHY]'],['font-size:22px;letter-spacing:4px;color:#ffd700;','WORLD CHAMPION'],['font-size:10px;color:rgba(255,204,0,0.5);','All 49 nations defeated'],['font-size:32px;',qSel!==null?TEAMS[qSel].f:'?'],['font-size:12px;color:rgba(255,255,255,0.4);',document.getElementById('qn1').value.trim()||'PLAYER']].forEach(function(d){var e=document.createElement('div');e.style.cssText=d[0];e.textContent=d[1];w.appendChild(e);});
   var btn=document.createElement('button');btn.style.cssText='margin-top:8px;background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:10px;padding:12px 32px;font-size:13px;color:#000;cursor:pointer;';btn.textContent='MAIN MENU';btn.onclick=exitQuest;w.appendChild(btn);qs.appendChild(w);
+}
+function questDebugWin(){
+  questProgress++;
+  questSave(questDiff,questProgress);
+  if(questProgress>=QUEST_TEAMS.length){showQuestChampion();return;}
+  renderQuestTower();
 }
 function exitQuest(){questMode=false;var hm=document.getElementById('humillacion-mundial');if(hm)hm.style.display='none';hideSC();hideScreen('s-quest-tower');showScreen('s-mode');}
 // Pause
