@@ -208,6 +208,15 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<meta property="og:title" content="World Cup Oracle '26">
+<meta property="og:description" content="Arcade football chaos — 49 nations, one champion. Play free in your browser!">
+<meta property="og:image" content="https://worldcuporacle26.io/icon-512.png">
+<meta property="og:url" content="https://worldcuporacle26.io">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="World Cup Oracle '26">
+<meta name="twitter:description" content="Arcade football chaos — 49 nations, one champion. Play free!">
+<meta name="twitter:image" content="https://worldcuporacle26.io/icon-512.png">
 </head>
 <body>
 <div id="rotate-overlay">
@@ -245,6 +254,16 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
     <div class="half-title">1 VS 1</div>
     <div class="half-desc">Online - real opponent</div>
     <button class="half-btn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.2);">COMING SOON</button>
+  </div>
+  <div style="position:absolute;bottom:8px;right:10px;z-index:10;display:flex;gap:8px;align-items:center;">
+    <div onclick="lbShow();hideScreen('s-mode');showScreen('s-leaderboard');" style="display:flex;align-items:center;gap:5px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:20px;padding:5px 10px;cursor:pointer;">
+      <span style="font-size:13px;">🏆</span>
+      <span style="font-size:8px;letter-spacing:1px;color:rgba(255,215,0,0.6);">TOP 10</span>
+    </div>
+    <a href="https://ko-fi.com/worldcuporacle" target="_blank" style="display:flex;align-items:center;gap:5px;background:rgba(255,94,91,0.12);border:1px solid rgba(255,94,91,0.3);border-radius:20px;padding:5px 10px;text-decoration:none;">
+      <span style="font-size:13px;">☕</span>
+      <span style="font-size:8px;letter-spacing:1px;color:rgba(255,150,150,0.7);">SUPPORT</span>
+    </a>
   </div>
 </div>
 
@@ -316,6 +335,15 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   </div>
 </div>
 
+<div class="screen off" id="s-leaderboard">
+  <div style="width:92%;max-width:500px;display:flex;flex-direction:column;gap:10px;max-height:80vh;">
+    <div style="font-family:'Russo One',sans-serif;font-size:16px;letter-spacing:3px;color:#ffd700;text-align:center;">LEADERBOARD</div>
+    <div style="font-size:8px;letter-spacing:2px;color:rgba(255,204,0,0.4);text-align:center;margin-top:-6px;">TOP 10 - THIS DEVICE</div>
+    <div id="lb-list" style="display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:60vh;"></div>
+    <button class="btn-sec" onclick="hideScreen('s-leaderboard');showScreen('s-mode');" style="margin-top:8px;">BACK</button>
+  </div>
+</div>
+
 <div class="screen off" id="s-multi">
   <div class="multi-wrap">
     <div class="multi-hdr">
@@ -382,7 +410,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 
 <div class="screen off" id="s-menu">
 <div class="menu-box">
-  <div class="title"> WORLD CUP ORACLE</div>
+  <div class="title"> WORLD CUP ORACLE <span style="background:rgba(255,100,100,0.15);border:1px solid rgba(255,100,100,0.4);border-radius:4px;padding:2px 6px;font-size:9px;letter-spacing:2px;color:rgba(255,120,120,0.8);vertical-align:middle;">BETA</span></div>
   <div class="subtitle">* 2026 *</div>
   <div class="prow">
     <div class="pbox">
@@ -510,7 +538,7 @@ function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
-function PITCH_B(){return Math.round(H()*0.98);}
+function PITCH_B(){return Math.round(H()*0.94);}
 function PITCH_H(){return PITCH_B()-PITCH_T();}
 function PITCH_CX(){return Math.round(W()/2);}
 function PITCH_CY(){return Math.round((PITCH_T()+PITCH_B())/2);}
@@ -524,7 +552,9 @@ function playerY(ay){var s=LS(),fo=s*1.05;return(PITCH_T()-fo)+ay*((PITCH_B()-fo
 var AD_H=50;
 function resize(){
   var w=window.innerWidth||document.documentElement.clientWidth;
-  var h=(window.visualViewport?window.visualViewport.height:window.innerHeight||document.documentElement.clientHeight)-AD_H;
+  // In PWA fullscreen mode, use screen dimensions properly
+  var vph=window.visualViewport?window.visualViewport.height:window.innerHeight||document.documentElement.clientHeight;
+  var h=vph-AD_H;
   canvas.width=w;canvas.height=h;canvas.style.width=w+'px';canvas.style.height=h+'px';
   scCanvas.width=w;scCanvas.height=h;scCanvas.style.width=w+'px';scCanvas.style.height=h+'px';
   seatCache={};positionControls();
@@ -535,6 +565,53 @@ function setVh(){
   document.documentElement.style.setProperty('--vh', vh*0.01+'px');
 }
 setVh();
+// == LEADERBOARD ==
+function lbSave(name, team, score0, score1, arena, diff){
+  try{
+    var lb=JSON.parse(localStorage.getItem('wco26_lb')||'[]');
+    lb.push({
+      name:name,
+      team:team,
+      score:score0+'-'+score1,
+      result:score0>score1?'WIN':score0===score1?'DRAW':'LOSS',
+      arena:['USA','Canada','Mexico'][arena]||'USA',
+      diff:['Amateur','Semi-Pro','World Class'][diff]||'Semi-Pro',
+      date:new Date().toLocaleDateString()
+    });
+    // keep only top 10 wins sorted by score difference
+    lb.sort(function(a,b){
+      var da=parseInt(a.score)-parseInt(a.score.split('-')[1]);
+      var db=parseInt(b.score)-parseInt(b.score.split('-')[1]);
+      return db-da;
+    });
+    lb=lb.slice(0,10);
+    localStorage.setItem('wco26_lb',JSON.stringify(lb));
+  }catch(e){}
+}
+
+function lbShow(){
+  try{
+    var lb=JSON.parse(localStorage.getItem('wco26_lb')||'[]');
+    var list=document.getElementById('lb-list');
+    list.innerHTML='';
+    if(lb.length===0){
+      list.innerHTML='<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:10px;padding:20px;">No matches yet. Play to set records!</div>';
+      return;
+    }
+    lb.forEach(function(e,i){
+      var col=e.result==='WIN'?'#ffd700':e.result==='DRAW'?'#90ee90':'#ff6b6b';
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 12px;';
+      row.innerHTML='<div style="font-size:14px;color:rgba(255,255,255,0.2);width:20px;">'+(i+1)+'</div>'+
+        '<div style="flex:1;"><div style="font-size:11px;color:#fff;letter-spacing:1px;">'+e.name+'</div>'+
+        '<div style="font-size:8px;color:rgba(255,255,255,0.4);">'+e.team+' vs CPU - '+e.arena+' - '+e.diff+'</div></div>'+
+        '<div style="text-align:right;"><div style="font-size:14px;font-weight:900;color:'+col+';">'+e.score+'</div>'+
+        '<div style="font-size:7px;color:'+col+';">'+e.result+'</div></div>';
+      list.appendChild(row);
+    });
+  }catch(e){}
+}
+
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',function(){resize();positionControls();});
   window.visualViewport.addEventListener('scroll',function(){resize();positionControls();});
@@ -553,10 +630,13 @@ function positionControls(){
     safeR=parseFloat(cs.paddingRight)||0;
     document.body.removeChild(testEl);
   }catch(e){}
+  // minimum safe margins
+  safeL=Math.max(safeL,8);
+  safeR=Math.max(safeR,8);
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL+4)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-4-safeR)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-safeR)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
@@ -1606,7 +1686,7 @@ var matchStartTime=null,matchDuration=0;
 function endGame(){
   gState='end';matchDuration=matchStartTime?Math.round((Date.now()-matchStartTime)/1000):0;matchStartTime=null;var s0=score[0],s1=score[1];
   roundsPlayed++;
-  document.getElementById('endscore').textContent=s0+' \u2013 '+s1;
+  document.getElementById('endscore').textContent=s0+' \u2013 '+s1;lbSave(pNames[0],sel[0]!==null?TEAMS[sel[0]].n:'Player',s0,s1,activeArena,aiDiff);
   var lbl=document.getElementById('endlbl');
   document.getElementById('endflags').textContent=(sel[0]!==null?TEAMS[sel[0]].f:'\u26BD')+'  '+(sel[1]!==null?TEAMS[sel[1]].f:'\uD83E\uDD16');
   if(s0===s1){lbl.textContent='DRAW';lbl.className='el-draw';}
