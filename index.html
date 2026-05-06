@@ -545,7 +545,7 @@ var canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 var scCanvas=document.getElementById('sc-canvas'),sctx=scCanvas.getContext('2d');
 function W(){return canvas.width;}
 function H(){return canvas.height;}
-function CTRL_W(){return Math.max(100,Math.min(W()*0.28,140));}
+function CTRL_W(){return Math.max(88,Math.min(W()*0.14,100));}
 function PITCH_L(){return CTRL_W();}
 function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
