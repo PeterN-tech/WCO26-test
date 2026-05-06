@@ -469,7 +469,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
   <button class="btn-sec" id="btn-menu" style="margin-top:5px;padding:7px 20px;font-size:9px;">MAIN MENU</button>
 </div>
 
-<div id="share-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:rgba(0,0,0,0.97);flex-direction:column;align-items:center;justify-content:center;gap:0;padding:env(safe-area-inset-top,8px) env(safe-area-inset-right,8px) env(safe-area-inset-bottom,8px) env(safe-area-inset-left,8px);overflow:hidden;">
+<div id="share-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:rgba(0,0,0,0.97);flex-direction:column;align-items:center;justify-content:center;gap:0;padding:max(env(safe-area-inset-top),44px) max(env(safe-area-inset-right),8px) max(env(safe-area-inset-bottom),8px) max(env(safe-area-inset-left),8px);overflow:hidden;">
   <div id="share-card" style="width:100%;max-width:680px;background:#080d18;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 10px 40px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;flex:1;max-height:calc(100vh - 80px);">
     <div style="position:absolute;inset:0;z-index:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.018) 48px,rgba(255,255,255,.018) 49px);"></div>
     <div id="sc-glow" style="position:absolute;inset:0;z-index:0;"></div>
@@ -481,38 +481,38 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
     </div>
     <div style="position:relative;z-index:2;display:flex;align-items:center;padding:8px 14px;gap:10px;flex:1;">
       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;flex-shrink:0;">
-        <div id="sc-p1-flag" style="font-size:34px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));"></div>
-        <div id="sc-p1-name" style="font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.6);text-transform:uppercase;text-align:center;font-family:Arial,sans-serif;"></div>
+        <div id="sc-p1-flag" style="font-size:44px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));"></div>
+        <div id="sc-p1-name" style="font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.6);text-transform:uppercase;text-align:center;font-family:Arial,sans-serif;"></div>
         <div id="sc-p1-rating" style="font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:20px;font-weight:700;text-align:center;font-family:Arial,sans-serif;"></div>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
         <div style="display:flex;align-items:center;gap:8px;">
-          <div id="sc-score-p1" style="font-size:64px;line-height:1;letter-spacing:-2px;color:#5bc8ff;text-shadow:0 0 20px rgba(91,200,255,.5);font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
-          <div style="font-size:42px;line-height:1;color:rgba(255,255,255,.2);font-family:Arial Black,Arial,sans-serif;font-weight:900;">-</div>
-          <div id="sc-score-p2" style="font-size:64px;line-height:1;letter-spacing:-2px;color:#ff6b6b;text-shadow:0 0 20px rgba(255,107,107,.5);font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
+          <div id="sc-score-p1" style="font-size:80px;line-height:1;letter-spacing:-2px;color:#5bc8ff;text-shadow:0 0 20px rgba(91,200,255,.5);font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
+          <div style="font-size:54px;line-height:1;color:rgba(255,255,255,.2);font-family:Arial Black,Arial,sans-serif;font-weight:900;">-</div>
+          <div id="sc-score-p2" style="font-size:80px;line-height:1;letter-spacing:-2px;color:#ff6b6b;text-shadow:0 0 20px rgba(255,107,107,.5);font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
         </div>
         <div id="sc-banner" style="width:100%;border-radius:8px;padding:6px 12px;text-align:center;">
-          <div id="sc-banner-main" style="font-size:16px;letter-spacing:3px;line-height:1;font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
+          <div id="sc-banner-main" style="font-size:20px;letter-spacing:3px;line-height:1;font-family:Arial Black,Arial,sans-serif;font-weight:900;"></div>
           <div id="sc-banner-sub" style="font-size:8px;letter-spacing:2px;margin-top:2px;text-transform:uppercase;font-family:Arial,sans-serif;"></div>
         </div>
         <div style="display:flex;align-items:center;gap:16px;">
           <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-            <div style="font-family:'Russo One',sans-serif;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;">Ended In</div>
-            <div id="sc-rounds" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:400;color:#5bc8ff;"></div>
+            <div style="font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;">Ended In</div>
+            <div id="sc-rounds" style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:400;color:#5bc8ff;"></div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-            <div id="sc-phase-lbl" style="font-family:'Russo One',sans-serif;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;"></div>
-            <div id="sc-phase" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:400;color:#5bc8ff;"></div>
+            <div id="sc-phase-lbl" style="font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;"></div>
+            <div id="sc-phase" style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:400;color:#5bc8ff;"></div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-            <div style="font-family:'Russo One',sans-serif;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;">Duration</div>
-            <div id="sc-balls" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:400;color:#5bc8ff;"></div>
+            <div style="font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.82);text-transform:uppercase;">Duration</div>
+            <div id="sc-balls" style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:400;color:#5bc8ff;"></div>
           </div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;flex-shrink:0;">
-        <div id="sc-p2-flag" style="font-size:34px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));"></div>
-        <div id="sc-p2-name" style="font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.6);text-transform:uppercase;text-align:center;font-family:Arial,sans-serif;"></div>
+        <div id="sc-p2-flag" style="font-size:44px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));"></div>
+        <div id="sc-p2-name" style="font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.6);text-transform:uppercase;text-align:center;font-family:Arial,sans-serif;"></div>
         <div id="sc-p2-rating" style="font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:20px;font-weight:700;text-align:center;font-family:Arial,sans-serif;"></div>
       </div>
     </div>
@@ -2144,11 +2144,16 @@ function sndPowerShoot(){
       var s=document.getElementById('intro-skip-btn');if(s){s.style.display='none';s.style.zIndex='-1';}
     },520);
   };
-  // safety \u2014 hide after 30s no matter what
+  // safety — always show play button after 3s no matter what
+  setTimeout(function(){
+    var b=document.getElementById('intro-play-btn');if(b)b.style.display='block';
+    var s=document.getElementById('intro-skip-btn');if(s)s.style.display='block';
+  },3000);
+  // safety — hide after 60s no matter what
   setTimeout(function(){
     var b=document.getElementById('intro-play-btn');if(b)b.style.display='none';
     var s=document.getElementById('intro-skip-btn');if(s)s.style.display='none';
-  },30000);
+  },60000);
 })();
 
 var AD_CREATIVES=[
