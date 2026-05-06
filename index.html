@@ -9,7 +9,7 @@
 <script>
 (function(){
   function resetViewport(){var mv=document.querySelector('meta[name=viewport]');if(mv){mv.content='width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,viewport-fit=cover';}}
-  document.addEventListener('focusin',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){var mv=document.querySelector('meta[name=viewport]');if(mv)mv.content='width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no';}},true);
+  document.addEventListener('focusin',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){var mv=document.querySelector('meta[name=viewport]');if(mv)mv.content='width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no';setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},300);}},true);
   document.addEventListener('focusout',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){setTimeout(resetViewport,100);setTimeout(function(){window.scrollTo(0,0);document.body.scrollTop=0;},150);}},true);
 })();
 </script>
@@ -57,7 +57,7 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 .csflag{font-size:16px;}.csname{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:rgba(255,255,255,0.6);}
 .csarrow{font-size:9px;color:rgba(255,255,255,0.3);transition:transform .2s;}
 .csbtn.open .csarrow{transform:rotate(180deg);}
-.csdd{position:absolute;top:calc(100% + 3px);left:0;right:0;background:#0d1c2e;border:1px solid rgba(255,255,255,0.12);border-radius:6px;max-height:180px;overflow-y:auto;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.8);}
+.csdd{position:fixed;left:5%;right:5%;top:15%;background:#0d1c2e;border:1px solid rgba(255,255,255,0.12);border-radius:10px;max-height:70vh;overflow-y:auto;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.95);}
 .csdd::-webkit-scrollbar{width:4px;}.csdd::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px;}
 .csearch{padding:6px 10px;position:sticky;top:0;background:#0d1c2e;border-bottom:1px solid rgba(255,255,255,0.06);}
 .csearch input{width:100%;background:rgba(255,255,255,0.06);border:none;border-radius:4px;padding:5px 8px;color:#fff;font-size:16px;outline:none;}
@@ -217,6 +217,14 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 <meta name="twitter:title" content="World Cup Oracle '26">
 <meta name="twitter:description" content="Arcade football chaos — 49 nations, one champion. Play free!">
 <meta name="twitter:image" content="https://worldcuporacle26.io/icon-512.png">
+<style>
+#name-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:2000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:20px;}
+#name-overlay.show{display:flex;}
+#name-overlay-title{font-family:'Russo One',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase;}
+#name-overlay-input{background:rgba(255,255,255,0.08);border:2px solid rgba(255,204,0,0.5);border-radius:12px;padding:16px 24px;color:#fff;font-size:28px;text-align:center;outline:none;letter-spacing:4px;width:80%;max-width:320px;font-family:'Russo One',sans-serif;}
+#name-overlay-input:focus{border-color:rgba(255,204,0,0.9);box-shadow:0 0 20px rgba(255,204,0,0.2);}
+#name-overlay-done{background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:10px;padding:14px 40px;color:#000;font-family:'Russo One',sans-serif;font-size:14px;letter-spacing:3px;cursor:pointer;}
+</style>
 </head>
 <body>
 <div id="rotate-overlay">
@@ -238,6 +246,11 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 <div id="intro-play-btn" onclick="finishIntro()" style="display:none;position:fixed;bottom:10%;left:50%;transform:translateX(-50%);z-index:201;background:linear-gradient(135deg,#b8860b,#ffd700);border:none;border-radius:14px;padding:14px 44px;color:#000;font-family:'Russo One',sans-serif;font-size:15px;letter-spacing:4px;cursor:pointer;box-shadow:0 4px 24px rgba(255,215,0,0.35);">> PLAY</div>
 <div id="intro-skip-btn" onclick="finishIntro()" style="display:none;position:fixed;bottom:10%;right:5%;z-index:201;background:rgba(0,0,0,0.6);border:1px solid rgba(255,215,0,0.5);border-radius:8px;padding:10px 20px;color:rgba(255,215,0,0.9);font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:3px;cursor:pointer;box-shadow:0 0 12px rgba(255,215,0,0.2);">SKIP ></div>
 
+<div id="name-overlay">
+  <div id="name-overlay-title">YOUR NAME</div>
+  <input id="name-overlay-input" type="text" maxlength="12" placeholder="ENTER NAME" autocomplete="off" autocorrect="off" spellcheck="false">
+  <button id="name-overlay-done">DONE ✓</button>
+</div>
 <div class="screen" id="s-mode">
   <div class="half-top" id="btn-mode-ai">
     <div class="pitch-tex"></div><div class="glow-tr"></div>
@@ -532,7 +545,7 @@ var canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 var scCanvas=document.getElementById('sc-canvas'),sctx=scCanvas.getContext('2d');
 function W(){return canvas.width;}
 function H(){return canvas.height;}
-function CTRL_W(){return Math.max(72,Math.min(W()*0.22,110));}
+function CTRL_W(){return Math.max(100,Math.min(W()*0.28,140));}
 function PITCH_L(){return CTRL_W();}
 function PITCH_R(){return W()-CTRL_W();}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
@@ -631,8 +644,8 @@ function positionControls(){
     document.body.removeChild(testEl);
   }catch(e){}
   // minimum safe margins
-  safeL=Math.max(safeL,8);
-  safeR=Math.max(safeR,8);
+  safeL=Math.max(safeL,4);
+  safeR=Math.max(safeR,4);
   var jz=document.getElementById('joyzone');
   jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
@@ -1779,6 +1792,30 @@ document.getElementById('btn-do-share').addEventListener('click',function(){
 });
 
 resize();
+
+// Name input overlay
+function showNameOverlay(targetInput){
+  var ov=document.getElementById('name-overlay');
+  var inp=document.getElementById('name-overlay-input');
+  inp.value=targetInput.value||'';
+  ov.classList.add('show');
+  setTimeout(function(){inp.focus();inp.select();},100);
+  document.getElementById('name-overlay-done').onclick=function(){
+    targetInput.value=inp.value;
+    // trigger input event
+    var ev=new Event('input',{bubbles:true});targetInput.dispatchEvent(ev);
+    ov.classList.remove('show');
+    targetInput.blur();
+  };
+  inp.onkeydown=function(e){if(e.key==='Enter'){document.getElementById('name-overlay-done').click();}};
+}
+// Override nick inputs
+document.querySelectorAll('input.nick').forEach(function(inp){
+  inp.addEventListener('focus',function(e){
+    e.preventDefault();this.blur();
+    showNameOverlay(this);
+  });
+});
 requestAnimationFrame(function(ts){lastTs=ts;requestAnimationFrame(loop);});
 
 // \u2500\u2500 POWER SHOT SOUND V3 \u2014 Woosh + metalic + sub-bass \u2500\u2500
