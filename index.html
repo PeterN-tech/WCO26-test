@@ -562,7 +562,7 @@ function GD(){return PITCH_W()*0.04;}
 function RR(){return Math.min(PITCH_W(),PITCH_H())*0.028;}
 function LS(){return Math.min(PITCH_W(),PITCH_H())*0.066;}
 function playerY(ay){var s=LS(),fo=s*1.05;return(PITCH_T()-fo)+ay*((PITCH_B()-fo)-(PITCH_T()-fo));}
-var AD_H=50;
+var AD_H=50; // !! DO NOT CHANGE !! Standard mobile banner = 50px (Google AdSense/AdMob spec). Change breaks ad monetization.
 function resize(){
   var w=window.innerWidth||document.documentElement.clientWidth;
   // In PWA fullscreen mode, use screen dimensions properly
@@ -2117,8 +2117,8 @@ function sndPowerShoot(){
     ictx.restore();ictx.restore();
     ictx.save();ictx.textAlign='center';
     ictx.fillStyle='#ffd700';ictx.shadowColor='rgba(255,215,0,0.7)';ictx.shadowBlur=22;
-    ictx.font='bold '+Math.round(Math.min(IW()*.048,IH()*.082))+'px Arial';ictx.fillText('WORLD CUP ORACLE',IW()/2,ipT()*0.52);
-    ictx.shadowBlur=10;ictx.fillStyle='rgba(255,215,0,0.65)';ictx.font=Math.round(Math.min(IW()*.022,IH()*.040))+'px Arial';ictx.fillText('\u2605   2026   \u2605',IW()/2,ipT()*0.78);
+    ictx.font='bold '+Math.round(Math.min(IW()*.038,IH()*.065))+'px Arial';ictx.fillText('WORLD CUP ORACLE',IW()/2,ipT()*0.62);
+    ictx.shadowBlur=10;ictx.fillStyle='rgba(255,215,0,0.65)';ictx.font=Math.round(Math.min(IW()*.022,IH()*.040))+'px Arial';ictx.fillText('\u2605   2026   \u2605',IW()/2,ipT()*0.85);
     ictx.restore();
   }
 
