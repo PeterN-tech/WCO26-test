@@ -652,12 +652,15 @@ function positionControls(){
   safeL=Math.max(safeL,4);
   safeR=Math.max(safeR,4);
   // center buttons vertically in game area, push to screen edges horizontally
-  var gameH = H(); // total game height below ad banner
-  var btnY = Math.round(AD_H + gameH/2 - bs/2); // true vertical center of screen
+  var gameH = H();
+  var btnY = Math.round(AD_H + gameH/2 - bs/2);
+  // In PWA mode safe areas are smaller - use minimal padding
+  var leftX = _isPWA ? 0 : Math.max(0, safeL-4);
+  var rightX = _isPWA ? W()-bs : W()-bs-Math.max(0,safeR-4);
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.max(0,safeL-4)+'px;top:'+btnY+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-Math.max(0,safeR-4))+'px;top:'+btnY+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+rightX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
