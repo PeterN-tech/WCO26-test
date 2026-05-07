@@ -565,10 +565,13 @@ function RR(){return Math.min(PITCH_W(),PITCH_H())*0.028;}
 function LS(){return Math.min(PITCH_W(),PITCH_H())*0.066;}
 function playerY(ay){var s=LS(),fo=s*1.05;return(PITCH_T()-fo)+ay*((PITCH_B()-fo)-(PITCH_T()-fo));}
 var AD_H=50; // !! DO NOT CHANGE !! Standard mobile banner = 50px (Google AdSense/AdMob spec). Change breaks ad monetization.
+// Detect if running as PWA (installed app) vs browser
+var _isPWA = window.matchMedia('(display-mode: fullscreen)').matches || 
+             window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true;
 function resize(){
-  var w=window.innerWidth||document.documentElement.clientWidth;
-  // In PWA fullscreen mode, use screen dimensions properly
-  var vph=window.visualViewport?window.visualViewport.height:window.innerHeight||document.documentElement.clientHeight;
+  var w=window.visualViewport?window.visualViewport.width:(window.innerWidth||document.documentElement.clientWidth);
+  var vph=window.visualViewport?window.visualViewport.height:(window.innerHeight||document.documentElement.clientHeight);
   var h=vph-AD_H;
   canvas.width=w;canvas.height=h;canvas.style.width=w+'px';canvas.style.height=h+'px';
   scCanvas.width=w;scCanvas.height=h;scCanvas.style.width=w+'px';scCanvas.style.height=h+'px';
@@ -648,11 +651,13 @@ function positionControls(){
   // minimum safe margins
   safeL=Math.max(safeL,4);
   safeR=Math.max(safeR,4);
-  // push buttons as far as possible toward screen edges
+  // center buttons vertically in game area, push to screen edges horizontally
+  var gameH = H(); // total game height below ad banner
+  var btnY = Math.round(AD_H + gameH/2 - bs/2); // true vertical center of screen
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL+2)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.max(0,safeL-4)+'px;top:'+btnY+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-safeR-2)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-Math.max(0,safeR-4))+'px;top:'+btnY+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
