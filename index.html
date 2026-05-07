@@ -206,6 +206,8 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 .rotate-sub{font-size:10px;letter-spacing:2px;color:rgba(255,204,0,0.5);text-transform:uppercase;text-align:center;}
 </style>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8075433811257830" crossorigin="anonymous"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <meta property="og:title" content="World Cup Oracle '26">
@@ -646,10 +648,14 @@ function positionControls(){
   // minimum safe margins
   safeL=Math.max(safeL,4);
   safeR=Math.max(safeR,4);
+  // center buttons in control zone, not near pitch edge
+  var pitchL=PITCH_L(), pitchR=PITCH_R();
+  var joyX = Math.round((pitchL - bs) / 2);
+  var shootX = Math.round(pitchR + (W() - pitchR - bs) / 2);
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.max(safeL,joyX)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-safeR)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.min(W()-bs-safeR,shootX)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
