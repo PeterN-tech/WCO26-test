@@ -648,14 +648,11 @@ function positionControls(){
   // minimum safe margins
   safeL=Math.max(safeL,4);
   safeR=Math.max(safeR,4);
-  // center buttons in control zone, not near pitch edge
-  var pitchL=PITCH_L(), pitchR=PITCH_R();
-  var joyX = Math.round((pitchL - bs) / 2);
-  var shootX = Math.round(pitchR + (W() - pitchR - bs) / 2);
+  // push buttons as far as possible toward screen edges
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.max(safeL,joyX)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(safeL+2)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+Math.min(W()-bs-safeR,shootX)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-safeR-2)+'px;top:'+(centerY-bs/2)+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
