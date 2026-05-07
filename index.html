@@ -651,12 +651,12 @@ function positionControls(){
   // minimum safe margins
   safeL=Math.max(safeL,4);
   safeR=Math.max(safeR,4);
-  // center buttons vertically in game area, push to screen edges horizontally
+  // center buttons vertically, respect safe areas always
   var gameH = H();
   var btnY = Math.round(AD_H + gameH/2 - bs/2);
-  // In PWA mode safe areas are smaller - use minimal padding
-  var leftX = _isPWA ? 0 : Math.max(0, safeL-4);
-  var rightX = _isPWA ? W()-bs : W()-bs-Math.max(0,safeR-4);
+  // Always use safe area insets - critical for iPhone Dynamic Island/notch
+  var leftX = Math.max(safeL, 44); // minimum 44px to clear camera
+  var rightX = W() - bs - Math.max(safeR, 8);
   var jz=document.getElementById('joyzone');
   jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
