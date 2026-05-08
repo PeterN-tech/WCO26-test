@@ -548,8 +548,8 @@ var scCanvas=document.getElementById('sc-canvas'),sctx=scCanvas.getContext('2d')
 function W(){return canvas.width;}
 function H(){return canvas.height;}
 function CTRL_W(){return Math.max(88,Math.min(W()*0.14,100));}
-function PITCH_L(){return CTRL_W();}
-function PITCH_R(){return W()-CTRL_W();}
+function PITCH_L(){return Math.round(CTRL_W()*1.15);}
+function PITCH_R(){return W()-Math.round(CTRL_W()*0.85);}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
