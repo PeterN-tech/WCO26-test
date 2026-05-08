@@ -654,11 +654,14 @@ function positionControls(){
   // center buttons vertically in game area, push to screen edges horizontally
   var gameH = H();
   var btnY = Math.round(AD_H + gameH/2 - bs/2);
-  // safeL is ~0 in browser, ~44px in PWA - use directly so buttons clear camera
+  // Force minimum 44px in PWA to clear iPhone camera, 2px in browser
+  var minSafe = _isPWA ? 44 : 2;
+  var leftX = Math.max(safeL, minSafe);
+  var rightX = W() - bs - Math.max(safeR, _isPWA ? 8 : 2);
   var jz=document.getElementById('joyzone');
-  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+safeL+'px;top:'+btnY+'px;position:absolute;z-index:5;';
+  jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
-  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+(W()-bs-safeR)+'px;top:'+btnY+'px;position:absolute;z-index:5;';
+  sb.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+rightX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
 }
 window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
