@@ -32,11 +32,11 @@ html,body{overflow:hidden;position:fixed;top:0;left:0;width:100%;height:100%;hei
 #ad-banner .ad-creative .ad-cta{background:rgba(255,255,255,0.22);border-radius:3px;padding:2px 7px;font-size:9px;color:#fff;font-family:Arial,sans-serif;}
 #ad-banner .ad-oracle{position:absolute;bottom:2px;right:28px;font-size:6px;color:#ccc;letter-spacing:1px;font-family:Arial,sans-serif;}
 #ad-banner .ad-close{display:none!important;width:16px;height:16px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#888;cursor:pointer;flex-shrink:0;border:none;font-family:Arial,sans-serif;}
-#c,#sc-canvas{position:absolute;top:50px;left:0;display:block;}
+#c,#sc-canvas{position:absolute;top:50px;left:0;display:block;z-index:1;}
 .screen{top:50px;}
 #hud{top:56px;}
 #set-overlay{top:50px;}
-.screen{position:absolute;top:50px;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;background:linear-gradient(180deg,#0a0f1f 0%,#040810 100%);overflow:hidden;}
+.screen{position:absolute;top:50px;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;background:linear-gradient(180deg,#0a0f1f 0%,#040810 100%);overflow:hidden;}
 .screen.off{display:none;}
 #s-mode{overflow:hidden;}
 #s-menu{justify-content:center;overflow:hidden;}
@@ -548,9 +548,32 @@ var scCanvas=document.getElementById('sc-canvas'),sctx=scCanvas.getContext('2d')
 function W(){return canvas.width;}
 function H(){return canvas.height;}
 function CTRL_W(){return Math.max(88,Math.min(W()*0.14,100));}
-function PITCH_L(){return Math.round(CTRL_W()*1.18);}
-function PITCH_R(){return W()-Math.round(CTRL_W()*0.82);}
+function PITCH_L(){
+  var base=Math.round(CTRL_W()*1.18);
+  // If pitch would be too wide, add extra margin
+  var pw=W()-Math.round(CTRL_W()*0.82)-base;
+  var ph=Math.round(H()*0.98)-Math.round(H()*0.15);
+  var maxW=Math.round(ph*2.5);
+  if(pw>maxW) base=Math.round((W()-maxW)/2);
+  return base;
+}
+function PITCH_R(){
+  var base=W()-Math.round(CTRL_W()*0.82);
+  var pL=Math.round(CTRL_W()*1.18);
+  var pw=base-pL;
+  var ph=Math.round(H()*0.98)-Math.round(H()*0.15);
+  var maxW=Math.round(ph*2.5);
+  if(pw>maxW) base=Math.round((W()+maxW)/2);
+  return base;
+}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
+function PITCH_W_CAPPED(){
+  // Cap pitch width to max 2.5x pitch height to avoid over-stretching on narrow devices
+  var pw=PITCH_R()-PITCH_L();
+  var ph=PITCH_H();
+  var maxW=Math.round(ph*2.5);
+  return Math.min(pw, maxW);
+}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
 function PITCH_B(){return Math.round(H()*0.94);}
