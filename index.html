@@ -654,10 +654,14 @@ function positionControls(){
   // center buttons vertically in game area, push to screen edges horizontally
   var gameH = H();
   var btnY = Math.round(AD_H + gameH/2 - bs/2);
-  // Force minimum 44px in PWA to clear iPhone camera, 2px in browser
-  var minSafe = _isPWA ? 44 : 2;
-  var leftX = Math.max(safeL, minSafe);
-  var rightX = W() - bs - Math.max(safeR, _isPWA ? 8 : 2);
+  // Center buttons in the zone between screen edge and pitch edge
+  var pL = PITCH_L();
+  var pR = PITCH_R();
+  var zoneL = pL; // space from screen left to pitch left
+  var zoneR = W() - pR; // space from pitch right to screen right
+  // Place button centered in its zone, respecting safe area
+  var leftX = Math.max(safeL, Math.round((zoneL - bs) / 2));
+  var rightX = Math.round(pR + (zoneR - bs) / 2);
   var jz=document.getElementById('joyzone');
   jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
   var sb=document.getElementById('shootbtn');
