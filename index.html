@@ -660,7 +660,7 @@ function positionControls(){
   var zoneL = pL; // space from screen left to pitch left
   var zoneR = W() - pR; // space from pitch right to screen right
   // Place button centered in its zone, respecting safe area
-  var leftX = Math.max(0, Math.round((zoneL - bs) / 2) - 15);
+  var leftX = Math.max(0, Math.round((zoneL - bs) / 2) - 15 + Math.round(bs/2));
   var rightX = Math.round(pR + (zoneR - bs) / 2);
   var jz=document.getElementById('joyzone');
   jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
