@@ -1156,7 +1156,7 @@ function updateAI(dt){
       pulses.push(new Pulse(1,aiAimY,shotStr));
     }
   }
-} nu
+}
 }
 
 function drawPitchBrand(cx,cy,cr){
@@ -2389,7 +2389,7 @@ endGame=function(){
     if(btnShare)btnShare.style.display='none';
     var b=document.createElement('button');
     b.className='btn-main quest-btn';
-    b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;position:fixed;bottom:140px;left:50%;transform:translateX(-50%);z-index:9999;';
+    b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;';
     if(won){b.textContent='NEXT CHALLENGE';}else{se.appendChild(b);return;}
     b.onclick=function(){
       if(btnRm)btnRm.style.display='';
@@ -2402,8 +2402,7 @@ endGame=function(){
     // EXIT QUEST button
     var bExit=document.createElement('button');
     bExit.className='btn-sec quest-exit';
-    bExit.style.cssText='margin-top:6px;padding:8px 24px;font-size:11px;letter-spacing:2px;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;';
-
+    bExit.style.cssText='margin-top:6px;padding:8px 24px;font-size:11px;letter-spacing:2px;';
     bExit.textContent='EXIT QUEST';
     bExit.onclick=function(){
       if(btnRm)btnRm.style.display='';
