@@ -2390,7 +2390,6 @@ endGame=function(){
     var b=document.createElement('button');
     b.className='btn-main quest-btn';
     b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;position:fixed;bottom:140px;left:50%;transform:translateX(-50%);z-index:9999;';
-
     if(won){b.textContent='NEXT CHALLENGE';}else{se.appendChild(b);return;}
     b.onclick=function(){
       if(btnRm)btnRm.style.display='';
