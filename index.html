@@ -671,7 +671,8 @@ window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
 
 var selectedArena=0,activeArena=0;
-function setArena(a){selectedArena=a;document.querySelectorAll('.abtn').forEach(function(b,i){b.classList.toggle('sel',i===a);});}
+function setArena(a){selectedArena=a;document.querySelectorAll('.function setArena(a){selectedArena=a;document.querySelectorAll('#arena-btns .abtn')
+').forEach(function(b,i){b.classList.toggle('sel',i===a);});}
 
 var ARENA_CFG=[
 {name:'USA',flag:'\uD83C\uDDFA\uD83C\uDDF8',stadiumName:'SOFI STADIUM',seats:['#1a4a8a','#c8232c','#f0f0f0','#0d2a5c'],tribGrad:['#1a1f2e','#1e2640'],sideStripe:['#1a3d1a','#173517'],accentLine:'#3d5afe',pitchStripe:['#1a3d1a','#173517'],drawFlag:function(cx,cy,fw,fh){var sh=fh/13;for(var s=0;s<13;s++){ctx.fillStyle=s%2===0?'#c62828':'#f5f5f5';ctx.fillRect(cx-fw/2,cy-fh/2+s*sh,fw,sh);}var cw2=fw*.4,ch=sh*7;ctx.fillStyle='#1a3a7a';ctx.fillRect(cx-fw/2,cy-fh/2,cw2,ch);ctx.fillStyle='#fff';var sC=6,sR=5,spX=cw2/(sC+.5),spY=ch/(sR+.5);for(var r=0;r<sR;r++)for(var c=0;c<sC;c++){ctx.beginPath();ctx.arc(cx-fw/2+spX*(c+.75),cy-fh/2+spY*(r+.6),Math.max(1,fw*.018),0,Math.PI*2);ctx.fill();}}},
