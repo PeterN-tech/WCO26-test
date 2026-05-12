@@ -2462,13 +2462,13 @@ endGame=function(){
     var b=document.createElement('button');
     b.className='btn-main quest-btn';
     b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;';
-    b.textContent=won?'NEXT CHALLENGE':'REPLAY';
+    b.textContent=won?'NEXT CHALLENGE':'MAIN MENU';
     b.onclick=function(){
       if(btnRm)btnRm.style.display='';
       if(btnMenu)btnMenu.style.display='';
       if(btnShare)btnShare.style.display='';
       hideScreen('s-end');
-      onQuestResult(won,draw);
+      if(won){onQuestResult(won,draw);}else{exitQuest();}
     };
     se.appendChild(b);
     // EXIT QUEST button
