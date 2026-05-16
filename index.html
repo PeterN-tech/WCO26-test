@@ -671,7 +671,7 @@ window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
 
 var selectedArena=0,activeArena=0;
-function setArena(a){selectedArena=a;document.querySelectorAll('.function setArena(a){selectedArena=a;document.querySelectorAll('#arena-btns .abtn')
+function setArena(a){selectedArena=a;document.querySelectorAll('#arena-btns .abtn')
 ').forEach(function(b,i){b.classList.toggle('sel',i===a);});}
 
 var ARENA_CFG=[
