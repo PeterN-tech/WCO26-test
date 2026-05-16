@@ -32,11 +32,11 @@ html,body{overflow:hidden;position:fixed;top:0;left:0;width:100%;height:100%;hei
 #ad-banner .ad-creative .ad-cta{background:rgba(255,255,255,0.22);border-radius:3px;padding:2px 7px;font-size:9px;color:#fff;font-family:Arial,sans-serif;}
 #ad-banner .ad-oracle{position:absolute;bottom:2px;right:28px;font-size:6px;color:#ccc;letter-spacing:1px;font-family:Arial,sans-serif;}
 #ad-banner .ad-close{display:none!important;width:16px;height:16px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#888;cursor:pointer;flex-shrink:0;border:none;font-family:Arial,sans-serif;}
-#c,#sc-canvas{position:absolute;top:50px;left:0;display:block;}
+#c,#sc-canvas{position:absolute;top:50px;left:0;display:block;z-index:1;}
 .screen{top:50px;}
 #hud{top:56px;}
 #set-overlay{top:50px;}
-.screen{position:absolute;top:50px;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;background:linear-gradient(180deg,#0a0f1f 0%,#040810 100%);overflow:hidden;}
+.screen{position:absolute;top:50px;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;background:linear-gradient(180deg,#0a0f1f 0%,#040810 100%);overflow:hidden;}
 .screen.off{display:none;}
 #s-mode{overflow:hidden;}
 #s-menu{justify-content:center;overflow:hidden;}
@@ -211,13 +211,13 @@ input.nick{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(25
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <meta property="og:title" content="World Cup Oracle '26">
-<meta property="og:description" content="Arcade football chaos -- 49 nations, one champion. Play free in your browser!">
+<meta property="og:description" content="Arcade football chaos — 49 nations, one champion. Play free in your browser!">
 <meta property="og:image" content="https://worldcuporacle26.io/icon-512.png">
 <meta property="og:url" content="https://worldcuporacle26.io">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="World Cup Oracle '26">
-<meta name="twitter:description" content="Arcade football chaos -- 49 nations, one champion. Play free!">
+<meta name="twitter:description" content="Arcade football chaos — 49 nations, one champion. Play free!">
 <meta name="twitter:image" content="https://worldcuporacle26.io/icon-512.png">
 <style>
 #name-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:2000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:20px;}
@@ -548,9 +548,32 @@ var scCanvas=document.getElementById('sc-canvas'),sctx=scCanvas.getContext('2d')
 function W(){return canvas.width;}
 function H(){return canvas.height;}
 function CTRL_W(){return Math.max(88,Math.min(W()*0.14,100));}
-function PITCH_L(){return CTRL_W();}
-function PITCH_R(){return W()-CTRL_W();}
+function PITCH_L(){
+  var base=Math.round(CTRL_W()*1.18);
+  // If pitch would be too wide, add extra margin
+  var pw=W()-Math.round(CTRL_W()*0.82)-base;
+  var ph=Math.round(H()*0.98)-Math.round(H()*0.15);
+  var maxW=Math.round(ph*2.5);
+  if(pw>maxW) base=Math.round((W()-maxW)/2);
+  return base;
+}
+function PITCH_R(){
+  var base=W()-Math.round(CTRL_W()*0.82);
+  var pL=Math.round(CTRL_W()*1.18);
+  var pw=base-pL;
+  var ph=Math.round(H()*0.98)-Math.round(H()*0.15);
+  var maxW=Math.round(ph*2.5);
+  if(pw>maxW) base=Math.round((W()+maxW)/2);
+  return base;
+}
 function PITCH_W(){return PITCH_R()-PITCH_L();}
+function PITCH_W_CAPPED(){
+  // Cap pitch width to max 2.5x pitch height to avoid over-stretching on narrow devices
+  var pw=PITCH_R()-PITCH_L();
+  var ph=PITCH_H();
+  var maxW=Math.round(ph*2.5);
+  return Math.min(pw, maxW);
+}
 function PITCH_T(){return Math.round(H()*0.15);}
 function TRIBUNE_H(){return PITCH_T()+2;}
 function PITCH_B(){return Math.round(H()*0.94);}
@@ -660,7 +683,7 @@ function positionControls(){
   var zoneL = pL; // space from screen left to pitch left
   var zoneR = W() - pR; // space from pitch right to screen right
   // Place button centered in its zone, respecting safe area
-  var leftX = Math.max(safeL, Math.round((zoneL - bs) / 2));
+  var leftX = Math.max(0, Math.round((zoneL - bs) / 2) - 15 + Math.round(bs/2));
   var rightX = Math.round(pR + (zoneR - bs) / 2);
   var jz=document.getElementById('joyzone');
   jz.style.cssText='width:'+bs+'px;height:'+bs+'px;left:'+leftX+'px;top:'+btnY+'px;position:absolute;z-index:5;';
@@ -671,8 +694,7 @@ window.addEventListener('resize',function(){resize();});
 window.addEventListener('orientationchange',function(){setTimeout(resize,400);});
 
 var selectedArena=0,activeArena=0;
-function setArena(a){selectedArena=a;document.querySelectorAll('#arena-btns .abtn')
-').forEach(function(b,i){b.classList.toggle('sel',i===a);});}
+function setArena(a){selectedArena=a;document.querySelectorAll('.abtn').forEach(function(b,i){b.classList.toggle('sel',i===a);});}
 
 var ARENA_CFG=[
 {name:'USA',flag:'\uD83C\uDDFA\uD83C\uDDF8',stadiumName:'SOFI STADIUM',seats:['#1a4a8a','#c8232c','#f0f0f0','#0d2a5c'],tribGrad:['#1a1f2e','#1e2640'],sideStripe:['#1a3d1a','#173517'],accentLine:'#3d5afe',pitchStripe:['#1a3d1a','#173517'],drawFlag:function(cx,cy,fw,fh){var sh=fh/13;for(var s=0;s<13;s++){ctx.fillStyle=s%2===0?'#c62828':'#f5f5f5';ctx.fillRect(cx-fw/2,cy-fh/2+s*sh,fw,sh);}var cw2=fw*.4,ch=sh*7;ctx.fillStyle='#1a3a7a';ctx.fillRect(cx-fw/2,cy-fh/2,cw2,ch);ctx.fillStyle='#fff';var sC=6,sR=5,spX=cw2/(sC+.5),spY=ch/(sR+.5);for(var r=0;r<sR;r++)for(var c=0;c<sC;c++){ctx.beginPath();ctx.arc(cx-fw/2+spX*(c+.75),cy-fh/2+spY*(r+.6),Math.max(1,fw*.018),0,Math.PI*2);ctx.fill();}}},
@@ -1313,7 +1335,7 @@ function drawCanvasScore(){
     ctx.font='900 '+Math.round(h*0.58)+'px Arial';ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=14;ctx.textAlign='center';ctx.fillText(hudScoreData[p].score,cx,y+h*0.88);ctx.shadowBlur=0;
   })();
 
-  // Timer card + Pause card -- left and right of host flag
+  // Timer card + Pause card — left and right of host flag
   (function(){
     var flagCX=W()/2;
     // flag half-width = pitchW*0.15 (flag total width = pitchW*0.3)
@@ -1323,7 +1345,7 @@ function drawCanvasScore(){
     var ch=Math.round(topH*0.82);
     var ty=Math.round((pT-ch)/2);
 
-    // TIMER card B -- pill shape, gold, centered
+    // TIMER card B — pill shape, gold, centered
     var tx=flagCX-flagHalfW-cw;
     ctx.fillStyle='rgba(0,0,0,0.75)';ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,ch/2);ctx.fill();
     ctx.strokeStyle='rgba(255,204,0,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(tx,ty,cw,ch,ch/2);ctx.stroke();
@@ -1334,7 +1356,7 @@ function drawCanvasScore(){
     ctx.fillText(timerTxt,tx+cw/2,ty+ch/2);
     ctx.shadowBlur=0;ctx.textBaseline='alphabetic';
 
-    // PAUSE card B -- pill with circle + bars
+    // PAUSE card B — pill with circle + bars
     var px=flagCX+flagHalfW;
     ctx.fillStyle='rgba(0,0,0,0.75)';ctx.beginPath();ctx.roundRect(px,ty,cw,ch,ch/2);ctx.fill();
     ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(px,ty,cw,ch,ch/2);ctx.stroke();
@@ -1604,43 +1626,13 @@ function fireShotRelease(){
     inC.slice(0,2).forEach(function(t){var dx=t.b.x-po.x,dy=t.b.y-po.y,d=t.dist,nx=dx/d,ny=dy/d,dot=nx;t.b.vx+=(dot*str)+((nx-dot)*str*.65);t.b.vy+=(ny*str*.65);t.b.powerHit=2.5;t.b.powerTrail=[];t.b.meteor=2.5;var sp=Math.hypot(t.b.vx,t.b.vy);if(sp>28){t.b.vx=t.b.vx/sp*28;t.b.vy=t.b.vy/sp*28;}});
     pulses.push(new Pulse(0,aimY,str));
     if(inC.length>0)sndMeteor();
-}else if(held>=1.5){
-var ps=2.0*tm[0].power;
-var inP=[];
-balls.forEach(function(b){
-  if(b.scored)return;
-  var dx=b.x-po.x,dy=b.y-po.y,d=Math.hypot(dx,dy);if(d<1)return;
-  var ad=Math.abs(Math.atan2(dy,dx));if(ad>Math.PI)ad=Math.PI*2-ad;
-  if(ad<=.52)inP.push({b:b,dist:d});
-});
-inP.sort(function(a,b){return a.dist-b.dist;});
-var hit1=inP.slice(0,2);
-var hit1set=new Set(hit1.map(function(t){return t.b;}));
-hit1.forEach(function(t){
-  var dx=t.b.x-po.x,dy=t.b.y-po.y,d=t.dist,nx=dx/d,ny=dy/d;
-  t.b.vx+=nx*ps;t.b.vy+=ny*ps;
-  t.b.powerHit=1.2;t.b.powerTrail=[];
-  var sp=Math.hypot(t.b.vx,t.b.vy);if(sp>16){t.b.vx=t.b.vx/sp*16;t.b.vy=t.b.vy/sp*16;}
-});
-var offZone=PITCH_R()-PITCH_W()*0.28;
-var inP2=[];
-balls.forEach(function(b){
-  if(b.scored||hit1set.has(b))return;
-  if(b.x<offZone)return;
-  var dx=b.x-po.x,dy=b.y-po.y,d=Math.hypot(dx,dy);if(d<1)return;
-  var ad=Math.abs(Math.atan2(dy,dx));if(ad>Math.PI)ad=Math.PI*2-ad;
-  if(ad<=.14)inP2.push({b:b,dist:d});
-});
-inP2.sort(function(a,b){return a.dist-b.dist;});
-inP2.slice(0,2).forEach(function(t){
-  var dx=t.b.x-po.x,dy=t.b.y-po.y,d=t.dist,nx=dx/d,ny=dy/d;
-  t.b.vx+=nx*ps;t.b.vy+=ny*ps;
-  t.b.powerHit=1.2;t.b.powerTrail=[];
-  var sp=Math.hypot(t.b.vx,t.b.vy);if(sp>16){t.b.vx=t.b.vx/sp*16;t.b.vy=t.b.vy/sp*16;}
-});
-pulses.push(new Pulse(0,aimY,ps));
-sndPowerShoot();
-
+  }else if(held>=2){
+    var ps=2.0*tm[0].power,inP=[];balls.forEach(function(b){if(b.scored)return;var dx=b.x-po.x,dy=b.y-po.y,d=Math.hypot(dx,dy);if(d<1)return;var ad=Math.abs(Math.atan2(dy,dx));if(ad>Math.PI)ad=Math.PI*2-ad;if(ad<=.52)inP.push({b:b,dist:d});});
+    inP.sort(function(a,b){return a.dist-b.dist;});
+    if(inP.length>0){var pr=inP[0],dx2=pr.b.x-po.x,dy2=pr.b.y-po.y,d2=pr.dist;pr.b.vx+=dx2/d2*ps;pr.b.vy+=dy2/d2*ps;pr.b.powerHit=1.2;pr.b.powerTrail=[];var sp2=Math.hypot(pr.b.vx,pr.b.vy);if(sp2>16){pr.b.vx=pr.b.vx/sp2*16;pr.b.vy=pr.b.vy/sp2*16;}}
+    inP.slice(1).forEach(function(t){var a2=Math.random()*Math.PI*2,w=ps*.1;t.b.vx+=Math.cos(a2)*w;t.b.vy+=Math.sin(a2)*w;var sp3=Math.hypot(t.b.vx,t.b.vy);if(sp3>4){t.b.vx=t.b.vx/sp3*4;t.b.vy=t.b.vy/sp3*4;}});
+    pulses.push(new Pulse(0,aimY,ps));
+    sndPowerShoot();
   }else{
     pulses.push(new Pulse(0,aimY,1.0));sndShoot();
   }
@@ -2228,12 +2220,12 @@ function sndPowerShoot(){
       var s=document.getElementById('intro-skip-btn');if(s){s.style.display='none';s.style.zIndex='-1';}
     },520);
   };
-  // safety -- always show play button after 3s no matter what
+  // safety — always show play button after 3s no matter what
   setTimeout(function(){
     var b=document.getElementById('intro-play-btn');if(b)b.style.display='block';
     var s=document.getElementById('intro-skip-btn');if(s)s.style.display='block';
   },3000);
-  // safety -- hide after 60s no matter what
+  // safety — hide after 60s no matter what
   setTimeout(function(){
     var b=document.getElementById('intro-play-btn');if(b)b.style.display='none';
     var s=document.getElementById('intro-skip-btn');if(s)s.style.display='none';
@@ -2463,13 +2455,13 @@ endGame=function(){
     var b=document.createElement('button');
     b.className='btn-main quest-btn';
     b.style.cssText='margin-top:8px;padding:10px 28px;font-size:12px;letter-spacing:2px;';
-    b.textContent=won?'NEXT CHALLENGE':'MAIN MENU';
+    b.textContent=won?'NEXT CHALLENGE':'REPLAY';
     b.onclick=function(){
       if(btnRm)btnRm.style.display='';
       if(btnMenu)btnMenu.style.display='';
       if(btnShare)btnShare.style.display='';
       hideScreen('s-end');
-      if(won){onQuestResult(won,draw);}else{exitQuest();}
+      onQuestResult(won,draw);
     };
     se.appendChild(b);
     // EXIT QUEST button
